@@ -1,28 +1,104 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Cabeçalho do site (não aparece diretamente na página) -->
     <meta charset="UTF-8">
-    <title>Meu Primeiro Site</title>
+    <title>Meu Site Completo</title>
+
+    <!-- CSS (estilo do site) -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #555;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 10px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body>
-    <!-- Tudo que aparece para o usuário fica dentro do <body> -->
 
-    <h1>Bem-vindo ao meu site</h1>
-    <p>Este é um exemplo básico de como um site funciona.</p>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Meu Site</h1>
+        <p>Aprendendo HTML, CSS e JavaScript</p>
+    </header>
 
-    <!-- Link para outra página -->
-    <a href="https://www.google.com">Ir para o Google</a>
+    <!-- Menu -->
+    <nav>
+        <a href="#">Início</a>
+        <a href="#">Sobre</a>
+        <a href="#">Contato</a>
+    </nav>
 
-    <!-- Imagem -->
-    <img src="https://via.placeholder.com/150" alt="Imagem de exemplo">
+    <!-- Conteúdo -->
+    <div class="container">
+        <h2>Conteúdo principal</h2>
+        <p>Clique no botão para ver JavaScript funcionando:</p>
 
-    <!-- Lista -->
-    <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-        <li>Item 3</li>
-    </ul>
+        <button onclick="mostrarMensagem()">Clique aqui</button>
+
+        <p id="mensagem"></p>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>© 2026 Meu Site</p>
+    </footer>
+
+    <!-- JavaScript (interatividade) -->
+    <script>
+        function mostrarMensagem() {
+            document.getElementById("mensagem").innerText = "Você clicou no botão!";
+        }
+    </script>
 
 </body>
 </html>
