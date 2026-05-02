@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UBS Fácil — Unidades de Saúde</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link rel="stylesheet" href="../css/pages/unidades.css"/>
+</head>
+<body class="page-unidades">
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="../index.html">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm1 10h-2V9h2v3zm0-4h-2V6h2v2z"/></svg></div>
+    <div class="nav-logo-text"><b>UBS Fácil</b><span>Plataforma SUS Digital</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Início</a>
+    <a href="medicamentos.html">Medicamentos</a>
+    <a href="unidades.html" class="active">Unidades</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="contato.html">Contato</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-outline" onclick="window.location='../index.html'">Cadastrar</button>
+    <button class="btn-primary" onclick="window.location='../index.html'">Entrar com Gov.br</button>
+  </div>
+  <button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer">
+  <div class="drawer-bg" onclick="closeDrawer()"></div>
+  <div class="drawer">
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+    <div class="drawer-links">
+      <a href="../index.html">Início</a>
+      <a href="medicamentos.html">Medicamentos</a>
+      <a href="unidades.html">Unidades de Saúde</a>
+      <a href="sobre.html">Sobre o UBS Fácil</a>
+      <a href="contato.html">Contato</a>
+    </div>
+    <div class="drawer-sep"></div>
+    <div class="drawer-btns">
+      <button class="btn-outline" onclick="window.location='../index.html'">Cadastrar</button>
+      <button class="btn-primary" onclick="window.location='../index.html'">Entrar com Gov.br</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO STRIP -->
+<div class="hero-strip">
+  <div class="hero-strip-left">
+    <h1>Unidades de Saúde</h1>
+    <p>Encontre UBS, UPA, hospitais e postos próximos a você</p>
+  </div>
+  <button class="loc-btn" id="loc-btn" onclick="useMyLocation()">
+    <svg viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+    <span id="loc-txt">Usar minha localização</span>
+  </button>
+</div>
+
+<!-- FILTROS -->
+<div class="filters-bar">
+  <button class="filter-btn active" id="f-todos" onclick="setFilter('todos')">
+    <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>Todos
+  </button>
+  <button class="filter-btn" id="f-ubs" onclick="setFilter('ubs')">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>UBS
+  </button>
+  <button class="filter-btn" id="f-upa" onclick="setFilter('upa')">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>UPA
+  </button>
+  <button class="filter-btn" id="f-hospital" onclick="setFilter('hospital')">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>Hospital
+  </button>
+  <button class="filter-btn" id="f-posto" onclick="setFilter('posto')">
+    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>Posto de Saúde
+  </button>
+  <button class="filter-btn" id="f-farmacia" onclick="setFilter('farmacia')">
+    <svg viewBox="0 0 24 24"><path d="M6.5 10h-2v3h-3v2h3v3h2v-3h3v-2h-3zm8.5-5c-3.87 0-7 3.13-7 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm2.5 8h-5V7h2v4h3v2z"/></svg>Farmácia Popular
+  </button>
+  <div class="radius-wrap">
+    <label>Raio:</label>
+    <select id="radius-sel" onchange="onRadiusChange()">
+      <option value="2000">2 km</option>
+      <option value="5000" selected>5 km</option>
+      <option value="10000">10 km</option>
+      <option value="20000">20 km</option>
+    </select>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div>
+        <h2 id="result-title">Resultados</h2>
+        <span id="result-count">Clique em "Usar minha localização"</span>
+      </div>
+      <button class="sidebar-toggle-map" onclick="document.getElementById('map-wrap').scrollIntoView({behavior:'smooth'})">Ver mapa ↓</button>
+    </div>
+    <div class="results-list" id="results-list">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <p>Permita o acesso à sua localização para ver unidades de saúde próximas.</p>
+      </div>
+    </div>
+  </div>
+  <div class="map-wrap" id="map-wrap">
+    <div class="map-loading" id="map-loading">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <p>Carregando mapa...</p>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../js/global.js"></script>
+<script src="../js/unidades.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvZgvllWYU15btO0mUO0QjN6D_pn0xSFM&libraries=places,geometry&callback=initMap" async defer></script>
+</body>
+</html>

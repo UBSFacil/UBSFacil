@@ -1,0 +1,51 @@
+/* ── SOBRE ── */
+.section-h2 { font-size: 18px; font-weight: 800; color: #0d2251; margin-bottom: .8rem; display: flex; align-items: center; gap: 10px; }
+.section-h2 svg { width: 22px; height: 22px; fill: #1565c0; flex-shrink: 0; }
+.card p { font-size: 14px; color: #555; line-height: 1.8; }
+
+/* PILARES */
+.pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 2rem; }
+.pillar { background: #fff; border: 0.5px solid #e0e5ef; border-radius: 14px; padding: 1.4rem; }
+.pillar-icon { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: .9rem; }
+.pillar-icon svg { width: 24px; height: 24px; fill: #fff; }
+.pi-blue   { background: #1565c0; }
+.pi-teal   { background: #26a69a; }
+.pi-green  { background: #43a047; }
+.pi-orange { background: #fb8c00; }
+.pillar h3 { font-size: 14px; font-weight: 800; color: #0d2251; margin-bottom: .4rem; }
+.pillar p  { font-size: 13px; color: #666; line-height: 1.6; }
+
+/* STATS */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 16px; margin-bottom: 2rem; }
+.stat { background: #1565c0; color: #fff; border-radius: 14px; padding: 1.4rem; text-align: center; }
+.stat .num { font-size: 2rem; font-weight: 800; color: #69f0ae; display: block; line-height: 1.1; margin-bottom: .3rem; }
+.stat .lbl { font-size: 12px; opacity: .85; font-weight: 600; }
+
+/* TECH */
+.tech-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.tech-pill { display: flex; align-items: center; gap: 6px; background: #f0f4fb; border: 0.5px solid #dde3ef; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 700; color: #1565c0; }
+.tech-pill.future { background: #fff8e1; border-color: #ffe082; color: #e65100; }
+.tech-pill span { font-size: 16px; }
+
+/* ROADMAP */
+.roadmap-list { display: flex; flex-direction: column; gap: 10px; }
+.roadmap-item { display: flex; align-items: flex-start; gap: 12px; }
+.roadmap-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.roadmap-dot svg { width: 14px; height: 14px; fill: #fff; }
+.rd-done     { background: #43a047; }
+.rd-progress { background: #1565c0; }
+.rd-next     { background: #e0e5ef; }
+.rd-next svg { fill: #aab; }
+.roadmap-item-text strong { font-size: 13px; font-weight: 800; color: #0d2251; display: block; margin-bottom: 2px; }
+.roadmap-item-text span   { font-size: 12px; color: #7a8aaa; }
+
+/* CTA */
+.cta { background: #1565c0; border-radius: 16px; padding: 2rem; text-align: center; color: #fff; margin-bottom: 2rem; }
+.cta h2 { font-size: 20px; font-weight: 800; margin-bottom: .6rem; }
+.cta p  { font-size: 14px; opacity: .88; margin-bottom: 1.4rem; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 768px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .pillars { grid-template-columns: 1fr; }
+}
