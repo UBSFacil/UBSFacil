@@ -1,21 +1,21 @@
 -- UBSFacil · Schema do Banco de Dados
 -- Autor: Kalleb Domingos
--- Data: 2026-05-02 --
+-- Data: 2026-05-02
 
--- 1. UBSs--
+-- 1. Unidades (UBSs)
 CREATE TABLE unidades (
     id       SERIAL PRIMARY KEY,
     nome     VARCHAR(100) NOT NULL,
     endereco VARCHAR(200) NOT NULL
 );
 
--- 2. Medicamentos --
+-- 2. Medicamentos
 CREATE TABLE medicamentos (
     id   SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );
 
--- 3. Usuários (Pacientes)--
+-- 3. Usuarios (Pacientes)
 CREATE TABLE usuarios (
     id         SERIAL PRIMARY KEY,
     nome       VARCHAR(100) NOT NULL,
@@ -23,7 +23,16 @@ CREATE TABLE usuarios (
     senha_hash VARCHAR(255) NOT NULL
 );
 
--- 4. Estoque --
+-- 4. Admins
+CREATE TABLE admins (
+    id            SERIAL PRIMARY KEY,
+    nome          VARCHAR(100) NOT NULL,
+    email         VARCHAR(150) NOT NULL UNIQUE,
+    senha_hash    VARCHAR(255) NOT NULL,
+    codigo_acesso VARCHAR(20)  NOT NULL UNIQUE
+);
+
+-- 5. Estoque
 CREATE TABLE estoque (
     id             SERIAL PRIMARY KEY,
     medicamento_id INT NOT NULL REFERENCES medicamentos(id),
@@ -33,19 +42,10 @@ CREATE TABLE estoque (
     UNIQUE (medicamento_id, unidade_id)
 );
 
--- 5. Administradores --
-CREATE TABLE admins (
-    id         SERIAL PRIMARY KEY,
-    nome       VARCHAR(100) NOT NULL,
-    email      VARCHAR(100) NOT NULL,
-    senha_hash VARCHAR(255) NOT NULL
-
-);
-
--- 6. Retiradas --
+-- 6. Retiradas
 CREATE TABLE retiradas (
     id             SERIAL PRIMARY KEY,
-    paciente_id    INT NOT NULL REFERENCES pacientes(id),
+    usuario_id     INT NOT NULL REFERENCES usuarios(id),
     medicamento_id INT NOT NULL REFERENCES medicamentos(id),
     unidade_id     INT NOT NULL REFERENCES unidades(id),
     retirado_em    TIMESTAMP NOT NULL DEFAULT NOW()
