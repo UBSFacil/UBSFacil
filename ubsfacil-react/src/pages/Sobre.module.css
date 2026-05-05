@@ -1,0 +1,58 @@
+.hero { background: var(--blue); color: #fff; padding: 4rem 2rem 4.5rem; text-align: center; position: relative; overflow: hidden; }
+.heroGlow { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 40%, rgba(38,166,154,.22) 0%, transparent 60%); pointer-events: none; }
+.heroContent { position: relative; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+.hero h1 { font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 900; margin-bottom: .7rem; }
+.hero h1 em { color: var(--accent); font-style: normal; }
+.hero p  { font-size: 1rem; opacity: .88; max-width: 520px; line-height: 1.7; }
+
+.missionGrid  { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: start; margin-bottom: 2rem; }
+.missionText  { background: #fff; border: 0.5px solid var(--gray-border); border-radius: 18px; padding: 2rem; }
+.missionText h2 { font-size: 20px; font-weight: 800; color: var(--dark-deep); margin-bottom: 1rem; }
+.missionText p  { font-size: 14px; color: #555; line-height: 1.8; margin-bottom: .9rem; }
+.missionText p:last-child { margin-bottom: 0; }
+.missionStats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.statCard     { background: var(--blue); color: #fff; border-radius: 14px; padding: 1.4rem; text-align: center; }
+.statNum      { font-size: 2rem; font-weight: 900; color: var(--accent); display: block; line-height: 1.1; margin-bottom: .3rem; }
+.statLbl      { font-size: 12px; opacity: .85; font-weight: 600; line-height: 1.4; }
+
+.pillars    { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 2rem; }
+.pillar     { background: #fff; border: 0.5px solid var(--gray-border); border-radius: 16px; padding: 1.5rem; transition: all .25s; }
+.pillarIcon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+.pillarIcon svg { width: 25px; height: 25px; fill: #fff; }
+.pillar h3  { font-size: 14px; font-weight: 800; color: var(--dark-deep); margin-bottom: .5rem; }
+.pillar p   { font-size: 13px; color: #666; line-height: 1.6; }
+
+.techCard   { background: #fff; border: 0.5px solid var(--gray-border); border-radius: 16px; padding: 1.8rem; margin-bottom: 2rem; }
+.techCard h2 { font-size: 18px; font-weight: 800; color: var(--dark-deep); margin-bottom: 1.2rem; }
+.techPills  { display: flex; flex-wrap: wrap; gap: 9px; }
+.techPill   { display: inline-flex; align-items: center; gap: 7px; background: #f0f4fb; border: 0.5px solid var(--gray-border2); border-radius: 10px; padding: 7px 13px; font-size: 13px; font-weight: 700; color: var(--blue); cursor: default; }
+.future     { background: #fff8e1 !important; border-color: #ffe082 !important; color: #e65100 !important; }
+.techPill span:first-child { font-size: 16px; }
+.soon       { font-size: 10px; background: #ffe082; color: #e65100; padding: 2px 6px; border-radius: 20px; font-weight: 700; }
+
+.roadmapCard { background: #fff; border: 0.5px solid var(--gray-border); border-radius: 16px; padding: 1.8rem; margin-bottom: 2rem; }
+.roadmapCard h2 { font-size: 18px; font-weight: 800; color: var(--dark-deep); margin-bottom: 1.4rem; }
+.roadmapList { display: flex; flex-direction: column; gap: 12px; }
+.roadmapItem { display: flex; align-items: flex-start; gap: 14px; }
+.rdDot  { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.rdDot svg { width: 15px; height: 15px; fill: #fff; }
+.rdDone     { background: #43a047; }
+.rdProgress { background: var(--blue); }
+.rdNext     { background: #e0e5ef; }
+.rdNext svg { fill: #aab; }
+.roadmapItem strong { font-size: 13px; font-weight: 800; color: var(--dark-deep); display: block; margin-bottom: 2px; }
+.roadmapItem span   { font-size: 12px; color: var(--gray-text); }
+
+.cta      { background: var(--blue); border-radius: 18px; padding: 2.5rem 2rem; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.cta::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 70% 50%, rgba(38,166,154,.2) 0%, transparent 60%); pointer-events:none; }
+.cta h2   { font-size: 22px; font-weight: 900; margin-bottom: .6rem; position: relative; }
+.cta p    { font-size: 14px; opacity: .88; margin-bottom: 1.6rem; position: relative; }
+.ctaBtns  { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+@media (max-width: 768px) {
+  .hero { padding: 2.5rem 1.2rem 3.5rem; }
+  .missionGrid { grid-template-columns: 1fr; }
+  .missionStats { grid-template-columns: 1fr 1fr; }
+  .pillars { grid-template-columns: 1fr; }
+  .ctaBtns { flex-direction: column; align-items: center; }
+}

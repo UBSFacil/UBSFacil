@@ -1,0 +1,41 @@
+/* ── CONTATO LAYOUT ── */
+.contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; margin-bottom: 2rem; }
+
+/* INFO SIDE */
+.info-side { display: flex; flex-direction: column; gap: 14px; }
+.info-card-title { font-size: 14px; font-weight: 800; color: #0d2251; margin-bottom: .9rem; display: flex; align-items: center; gap: 8px; }
+.info-card-title svg { width: 18px; height: 18px; fill: #1565c0; flex-shrink: 0; }
+.info-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: .8rem; }
+.info-item:last-child { margin-bottom: 0; }
+.info-item-icon { width: 34px; height: 34px; background: #e8f0fe; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.info-item-icon svg { width: 17px; height: 17px; fill: #1565c0; }
+.info-item-text strong { font-size: 13px; font-weight: 700; color: #1a2a4a; display: block; }
+.info-item-text span   { font-size: 12px; color: #7a8aaa; }
+
+/* SUS BOX */
+.sus-box { background: #1565c0; color: #fff; border-radius: 14px; padding: 1.3rem; }
+.sus-box h3    { font-size: 14px; font-weight: 800; margin-bottom: .8rem; opacity: .9; }
+.sus-number    { font-size: 2rem; font-weight: 800; color: #69f0ae; display: block; line-height: 1.1; margin-bottom: .3rem; }
+.sus-box p     { font-size: 12px; opacity: .8; line-height: 1.6; }
+
+/* FORM */
+.send-btn { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.send-btn svg { width: 17px; height: 17px; fill: #fff; }
+.char-count { text-align: right; font-size: 11px; color: #aab; margin-top: 3px; }
+.success-msg { display: none; background: #e8f5e9; border: 1.5px solid #a5d6a7; border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem; }
+.success-msg p { font-size: 14px; color: #2e7d32; font-weight: 700; }
+.success-msg.show { display: block; }
+
+/* FAQ */
+.faq-item { border-bottom: 0.5px solid #eef2f9; padding: .9rem 0; cursor: pointer; }
+.faq-item:last-child { border-bottom: none; }
+.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.faq-q span { font-size: 14px; font-weight: 700; color: #1a2a4a; }
+.faq-q svg  { width: 18px; height: 18px; fill: #1565c0; flex-shrink: 0; transition: transform .2s; }
+.faq-item.open .faq-q svg { transform: rotate(180deg); }
+.faq-a { font-size: 13px; color: #666; line-height: 1.7; padding-top: .7rem; display: none; }
+.faq-item.open .faq-a { display: block; }
+
+@media (max-width: 768px) {
+  .contact-layout { grid-template-columns: 1fr; }
+}

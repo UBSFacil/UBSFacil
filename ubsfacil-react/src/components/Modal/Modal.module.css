@@ -1,0 +1,9 @@
+.overlay { position: fixed; inset: 0; background: rgba(10,20,50,.55); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+.modal { background: #fff; border-radius: 20px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(21,101,192,.22); }
+.close { position: absolute; top: 14px; right: 14px; background: #f0f4fb; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; z-index: 1; }
+.close:hover { background: #e8f0fe; transform: rotate(90deg); }
+.close svg { width: 16px; height: 16px; fill: #7a8aaa; }
+.header { padding: 1.8rem 1.8rem 0; }
+.title { font-size: 20px; font-weight: 800; color: #0d2251; margin-bottom: 4px; }
+.sub   { font-size: 13px; color: #7a8aaa; }
+.body  { padding: 1.4rem 1.8rem 1.8rem; }

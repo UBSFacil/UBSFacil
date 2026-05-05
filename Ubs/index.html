@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UBS Fácil — Saúde pública mais perto de você</title>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="css/pages/home.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm1 10h-2V9h2v3zm0-4h-2V6h2v2z"/></svg></div>
+    <div class="nav-logo-text"><b>UBS Fácil</b><span>Plataforma SUS Digital</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Início</a>
+    <a href="pages/medicamentos.html">Medicamentos</a>
+    <a href="pages/unidades.html">Unidades</a>
+    <a href="pages/sobre.html">Sobre</a>
+    <a href="pages/contato.html">Contato</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-outline" onclick="setTab('cad')">Cadastrar</button>
+    <button class="btn-primary" onclick="setTab('log')">Entrar com Gov.br</button>
+  </div>
+  <button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer">
+  <div class="drawer-bg" onclick="closeDrawer()"></div>
+  <div class="drawer">
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+    <div class="drawer-links">
+      <a href="index.html">Início</a>
+      <a href="pages/medicamentos.html">Medicamentos</a>
+      <a href="pages/unidades.html">Unidades de Saúde</a>
+      <a href="pages/sobre.html">Sobre o UBS Fácil</a>
+      <a href="pages/contato.html">Contato</a>
+    </div>
+    <div class="drawer-sep"></div>
+    <div class="drawer-btns">
+      <button class="btn-outline" onclick="closeDrawer();setTab('cad')">Cadastrar</button>
+      <button class="btn-primary" onclick="closeDrawer();setTab('log')">Entrar com Gov.br</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="hero-dot"></span> Plataforma SUS Digital</div>
+  <h1>Saúde pública <em>mais perto de você</em></h1>
+  <p>Encontre unidades de saúde e medicamentos disponíveis na sua região, de forma rápida e totalmente gratuita.</p>
+  <div class="hero-btns">
+    <a class="hero-btn-w" href="pages/medicamentos.html">
+      <svg viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      Buscar medicamento
+    </a>
+    <a class="hero-btn-g" href="pages/unidades.html">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      Ver unidades no mapa
+    </a>
+  </div>
+</div>
+
+<!-- AUTH CARD -->
+<div class="auth-wrap">
+  <div class="auth-card card card-xl">
+    <div class="auth-head">
+      <h2 id="card-title">Criar sua conta</h2>
+      <p id="card-sub">Acesse todos os recursos do UBS Fácil</p>
+    </div>
+    <div class="tabs">
+      <button class="tab on" id="tab-cad" onclick="setTab('cad')">Cadastrar</button>
+      <button class="tab" id="tab-log" onclick="setTab('log')">Entrar</button>
+    </div>
+    <div id="panel-cad">
+      <button class="gov-btn">
+        <span class="gov-pill">gov</span>
+        <div><span class="gov-lbl">Cadastrar com Gov.br</span><span class="gov-sub-txt">Conta única do governo federal</span></div>
+      </button>
+      <div class="card-foot" style="margin-top:.8rem">Já tem conta? <a onclick="setTab('log')">Entrar agora</a></div>
+    </div>
+    <div id="panel-log" style="display:none">
+      <button class="gov-btn">
+        <span class="gov-pill">gov</span>
+        <div><span class="gov-lbl">Entrar com Gov.br</span><span class="gov-sub-txt">Conta única do governo federal</span></div>
+      </button>
+      <div class="divider"><span>ou use seu e-mail</span></div>
+      <div class="frow"><label>E-mail ou CPF</label><input type="text" placeholder="seu@email.com ou 000.000.000-00"/></div>
+      <div class="frow">
+        <label>Senha</label>
+        <div class="pass-wrap">
+          <input type="password" id="pw1" placeholder="••••••••"/>
+          <button class="eye-btn" onclick="tog('pw1')" type="button">
+            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="forgot"><a>Esqueci minha senha</a></div>
+      <button class="submit-btn btn-primary btn-full">Entrar na plataforma</button>
+      <div class="card-foot">Não tem conta? <a onclick="setTab('cad')">Cadastre-se grátis</a></div>
+    </div>
+    <div class="secure-row">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      <span>Plataforma segura · Ministério da Saúde · dados protegidos</span>
+    </div>
+  </div>
+</div>
+
+<!-- AÇÕES -->
+<div class="section">
+  <h2 class="section-title">Ações</h2>
+  <div class="actions-grid">
+    <a class="action-card" href="pages/medicamentos.html">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg></div>
+      <span>Buscar Remédios</span>
+    </a>
+    <a class="action-card" href="pages/unidades.html">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+      <span>Rede de Saúde</span>
+    </a>
+    <div class="action-card" onclick="openModal('modal-vacinas')">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M6.5 10h-2v3h-3v2h3v3h2v-3h3v-2h-3zm8.5-5l-1.41 1.41L15.17 8H9v2h6.17l-1.59 1.59L15 13l4-4z"/></svg></div>
+      <span>Cartilha de Vacinas</span>
+    </div>
+    <div class="action-card" onclick="openModal('modal-certidao')">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+      <span>Valida Certidão</span>
+    </div>
+    <a class="action-card" href="pages/contato.html">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+      <span>Fale com o SUS</span>
+    </a>
+    <a class="action-card" href="pages/sobre.html">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+      <span>Sobre o SUS</span>
+    </a>
+    <div class="action-card" onclick="openModal('modal-termos')">
+      <div class="action-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+      <span>Termos de Uso</span>
+    </div>
+  </div>
+</div>
+
+<!-- INFO CARDS -->
+<div class="section">
+  <div class="info-grid">
+    <div class="info-card info-card-accent">
+      <span class="info-badge badge-blue">SUS Digital</span>
+      <h3>Acesso gratuito à saúde pública</h3>
+      <p>Consulte a disponibilidade de medicamentos em unidades básicas de saúde próximas a você em tempo real.</p>
+    </div>
+    <div class="info-card">
+      <span class="info-badge badge-teal">Ministério da Saúde</span>
+      <h3>Dados atualizados pelas UBS</h3>
+      <p>As informações são fornecidas diretamente pelas unidades de saúde cadastradas na plataforma SUS Digital.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <b>UBS Fácil</b>
+  <p>© 2026 · Ministério da Saúde · Plataforma SUS Digital</p>
+</footer>
+
+<!-- MODAIS -->
+<div class="modal-overlay" id="modal-vacinas" onclick="bgClose(event,'modal-vacinas')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-vacinas')">×</button>
+    <h2>Cartilha de Vacinas</h2><p class="modal-sub">Consulte o calendário vacinal do SUS.</p>
+    <div class="mfrow"><label>CPF ou CNS</label><input type="text" placeholder="000.000.000-00"/></div>
+    <div class="mfrow"><label>Data de nascimento</label><input type="text" placeholder="dd/mm/aaaa"/></div>
+    <div class="mfrow"><label>Calendário</label><select><option>Criança (0–10 anos)</option><option>Adolescente (11–19)</option><option>Adulto (20–59)</option><option>Idoso (60+)</option></select></div>
+    <button class="modal-submit">Ver cartilha</button>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-certidao" onclick="bgClose(event,'modal-certidao')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-certidao')">×</button>
+    <h2>Validar Certidão</h2><p class="modal-sub">Verifique a autenticidade de documentos do SUS.</p>
+    <div class="mfrow"><label>Código de autenticação</label><input type="text" placeholder="Cole aqui o código..."/></div>
+    <div class="mfrow"><label>Tipo de documento</label><select><option>Cartilha de Vacinas</option><option>Atestado Médico</option><option>Laudo</option><option>Receita Digital</option></select></div>
+    <button class="modal-submit">Validar documento</button>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-termos" onclick="bgClose(event,'modal-termos')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('modal-termos')">×</button>
+    <h2>Termos de Uso</h2><p class="modal-sub">Plataforma UBS Fácil · Ministério da Saúde</p>
+    <div style="font-size:13px;color:#555;line-height:1.7;max-height:260px;overflow-y:auto;border:0.5px solid #dde3ef;border-radius:9px;padding:1rem;margin-bottom:1rem;">
+      <p style="font-weight:700;color:#1a2a4a;margin-bottom:.5rem;">1. Uso da plataforma</p>
+      <p style="margin-bottom:1rem;">O UBS Fácil é uma plataforma pública do Ministério da Saúde destinada à consulta de informações sobre medicamentos e unidades de saúde do SUS.</p>
+      <p style="font-weight:700;color:#1a2a4a;margin-bottom:.5rem;">2. Dados pessoais</p>
+      <p style="margin-bottom:1rem;">Os dados são tratados conforme a LGPD e utilizados exclusivamente para melhorar os serviços.</p>
+      <p style="font-weight:700;color:#1a2a4a;margin-bottom:.5rem;">3. Responsabilidade</p>
+      <p>As informações têm caráter informativo. Para diagnóstico, consulte um profissional de saúde.</p>
+    </div>
+    <button class="modal-submit" onclick="closeModal('modal-termos')">Li e concordo</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/global.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

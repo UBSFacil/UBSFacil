@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UBS Fácil — Contato</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link rel="stylesheet" href="../css/pages/contato.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="../index.html">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm1 10h-2V9h2v3zm0-4h-2V6h2v2z"/></svg></div>
+    <div class="nav-logo-text"><b>UBS Fácil</b><span>Plataforma SUS Digital</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Início</a>
+    <a href="medicamentos.html">Medicamentos</a>
+    <a href="unidades.html">Unidades</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="contato.html" class="active">Contato</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-outline" onclick="window.location='../index.html'">Cadastrar</button>
+    <button class="btn-primary" onclick="window.location='../index.html'">Entrar com Gov.br</button>
+  </div>
+  <button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer">
+  <div class="drawer-bg" onclick="closeDrawer()"></div>
+  <div class="drawer">
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+    <div class="drawer-links">
+      <a href="../index.html">Início</a>
+      <a href="medicamentos.html">Medicamentos</a>
+      <a href="unidades.html">Unidades de Saúde</a>
+      <a href="sobre.html">Sobre o UBS Fácil</a>
+      <a href="contato.html">Contato</a>
+    </div>
+    <div class="drawer-sep"></div>
+    <div class="drawer-btns">
+      <button class="btn-outline" onclick="window.location='../index.html'">Cadastrar</button>
+      <button class="btn-primary" onclick="window.location='../index.html'">Entrar com Gov.br</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="hero-dot"></span> Fale com a equipe</div>
+  <h1>Entre em <em>contato</em></h1>
+  <p>Tem dúvidas, sugestões ou encontrou algum problema? Nossa equipe está pronta para te ajudar.</p>
+</div>
+
+<div class="section" style="margin-top:2.5rem;">
+  <div class="contact-layout">
+
+    <!-- INFO -->
+    <div class="info-side">
+      <div class="card">
+        <h3 class="info-card-title">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Canais de atendimento
+        </h3>
+        <div class="info-item">
+          <div class="info-item-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+          <div class="info-item-text"><strong>E-mail</strong><span>contato@ubsfacil.saude.gov.br</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+          <div class="info-item-text"><strong>Chat no aplicativo</strong><span>Disponível após login com Gov.br</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+          <div class="info-item-text"><strong>Endereço</strong><span>Ministério da Saúde, Brasília – DF</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+          <div class="info-item-text"><strong>Horário</strong><span>Segunda a sexta, 8h às 18h</span></div>
+        </div>
+      </div>
+      <div class="sus-box">
+        <h3>Central SUS</h3>
+        <span class="sus-number">0800 61 1997</span>
+        <p>Gratuito · 24 horas · todos os dias<br/>Urgências médicas: ligue 192 (SAMU)</p>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="card card-xl">
+      <h2 style="font-size:18px;font-weight:800;color:#0d2251;margin-bottom:.4rem;">Envie sua mensagem</h2>
+      <p style="font-size:13px;color:#7a8aaa;margin-bottom:1.4rem;">Respondemos em até 2 dias úteis.</p>
+
+      <div class="frow-row">
+        <div class="frow"><label>Nome</label><input type="text" id="f-nome" placeholder="Seu nome"/></div>
+        <div class="frow"><label>Sobrenome</label><input type="text" placeholder="Sobrenome"/></div>
+      </div>
+      <div class="frow"><label>E-mail</label><input type="email" id="f-email" placeholder="seu@email.com"/></div>
+      <div class="frow"><label>Assunto</label>
+        <select id="f-assunto">
+          <option value="">Selecione o assunto</option>
+          <option>Dúvida sobre medicamentos</option>
+          <option>Problema técnico na plataforma</option>
+          <option>Sugestão de melhoria</option>
+          <option>Unidade de saúde desatualizada</option>
+          <option>Parceria institucional</option>
+          <option>Imprensa e comunicação</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="frow">
+        <label>Mensagem</label>
+        <textarea id="f-msg" placeholder="Descreva sua dúvida, sugestão ou problema em detalhes..." oninput="updateCount()"></textarea>
+        <div class="char-count"><span id="char-n">0</span>/500</div>
+      </div>
+      <button class="btn-primary btn-full send-btn" onclick="submitForm()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        Enviar mensagem
+      </button>
+      <div class="success-msg" id="success-msg">
+        <p>✓ Mensagem enviada com sucesso! Retornaremos em até 2 dias úteis.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="card" style="margin-top:2rem;margin-bottom:2rem;">
+    <h2 style="font-size:17px;font-weight:800;color:#0d2251;margin-bottom:1.2rem;">Perguntas frequentes</h2>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>O UBS Fácil é gratuito?</span><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+      <div class="faq-a">Sim, o UBS Fácil é 100% gratuito para todos os cidadãos brasileiros. A plataforma é mantida pelo Ministério da Saúde e não possui nenhum tipo de cobrança.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Como saber se um medicamento está disponível?</span><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+      <div class="faq-a">Use a busca na página de Medicamentos. Informe o nome do medicamento para ver as unidades que têm o produto em estoque.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Preciso de conta para usar o UBS Fácil?</span><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+      <div class="faq-a">Para funções básicas como buscar medicamentos e encontrar unidades no mapa, não é necessário login. Para funcionalidades personalizadas, você precisará se autenticar via Gov.br.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Os dados de saúde são protegidos?</span><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+      <div class="faq-a">Sim. Todos os dados pessoais são tratados em conformidade com a LGPD (Lei nº 13.709/2018). A autenticação é feita exclusivamente via Gov.br.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Como reportar uma informação incorreta?</span><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+      <div class="faq-a">Use o formulário acima selecionando "Unidade de saúde desatualizada". Nossa equipe irá verificar e corrigir junto às secretarias de saúde responsáveis.</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <b>UBS Fácil</b>
+  <p>© 2026 · Ministério da Saúde · Plataforma SUS Digital</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="../js/global.js"></script>
+<script src="../js/contato.js"></script>
+</body>
+</html>
