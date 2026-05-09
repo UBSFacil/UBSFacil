@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🏥 Plano de Desenvolvimento — UBSFacil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #0b0f12;
+      --surface:  #131820;
+      --surface2: #1a2130;
+      --border:   #1f2e3d;
+      --accent:   #3dd68c;   /* verde saúde */
+      --accent2:  #4da6ff;   /* azul info */
+      --accent3:  #f0c94a;   /* amarelo destaque */
+      --accent4:  #ff7b54;   /* laranja alerta */
+      --text:     #dce8f5;
+      --muted:    #5c7a96;
+      --danger:   #ff5f6d;
+      --code-bg:  #0e1419;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.75; min-height: 100vh; }
+
+    /* HEADER */
+    header {
+      position: relative; overflow: hidden;
+      padding: 80px 60px 60px; max-width: 1200px; margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse at 15% 60%, rgba(61,214,140,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(77,166,255,0.07) 0%, transparent 55%);
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px);
+      opacity: 0.10;
+    }
+    .header-inner { position: relative; }
+    .badge {
+      display: inline-block;
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      color: var(--accent);
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 14px; border-radius: 999px; margin-bottom: 20px;
+    }
+    h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+    h1 span { color: var(--accent); }
+    .subtitle { color: var(--muted); font-size: 1.05rem; max-width: 660px; }
+    .meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; }
+    .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); }
+    .meta-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* CONTAINER & SECTIONS */
+    .container { padding: 60px; max-width: 1200px; margin: 0 auto; }
+    .section { margin-bottom: 72px; opacity: 0; transform: translateY(24px); animation: fadeUp 0.5s forwards; }
+    .section:nth-child(1)  { animation-delay: 0.05s; }
+    .section:nth-child(2)  { animation-delay: 0.10s; }
+    .section:nth-child(3)  { animation-delay: 0.15s; }
+    .section:nth-child(4)  { animation-delay: 0.20s; }
+    .section:nth-child(5)  { animation-delay: 0.25s; }
+    .section:nth-child(6)  { animation-delay: 0.30s; }
+    .section:nth-child(7)  { animation-delay: 0.35s; }
+    .section:nth-child(8)  { animation-delay: 0.40s; }
+    .section:nth-child(9)  { animation-delay: 0.45s; }
+    .section:nth-child(10) { animation-delay: 0.50s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+    .step-num {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent2);
+      background: color-mix(in srgb, var(--accent2) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent2) 25%, transparent);
+      padding: 4px 10px; border-radius: 6px; white-space: nowrap;
+    }
+    .step-num.green  { color: var(--accent);  background: color-mix(in srgb, var(--accent)  10%, transparent); border-color: color-mix(in srgb, var(--accent)  25%, transparent); }
+    .step-num.orange { color: var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 25%, transparent); }
+    .step-num.yellow { color: var(--accent3); background: color-mix(in srgb, var(--accent3) 10%, transparent); border-color: color-mix(in srgb, var(--accent3) 25%, transparent); }
+    .step-num.red    { color: var(--danger);  background: color-mix(in srgb, var(--danger)  10%, transparent); border-color: color-mix(in srgb, var(--danger)  25%, transparent); }
+
+    h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+    h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--accent2); margin: 24px 0 10px; }
+    p { color: var(--text); margin-bottom: 14px; font-size: 0.97rem; }
+    p:last-child { margin-bottom: 0; }
+    em     { color: var(--accent3); font-style: normal; font-weight: 500; }
+    strong { color: #fff; font-weight: 500; }
+
+    /* CARD */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 20px; }
+
+    /* BLOCKQUOTE */
+    blockquote { background: var(--surface); border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; padding: 18px 24px; margin: 20px 0; font-size: 0.95rem; }
+    blockquote p { color: var(--muted); margin: 0; }
+    blockquote strong { color: var(--accent); }
+
+    /* CODE */
+    code { font-family: 'DM Mono', monospace; font-size: 0.85em; background: var(--surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; color: var(--accent2); }
+    .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin: 16px 0; font-family: 'DM Mono', monospace; font-size: 0.88rem; color: var(--accent2); overflow-x: auto; line-height: 2; white-space: pre; }
+    .code-block .comment { color: var(--muted); }
+    .code-block .ok   { color: var(--accent); }
+    .code-block .str  { color: var(--accent3); }
+    .code-block .kw   { color: var(--accent4); }
+
+    /* ALERTS */
+    .alert { display: flex; gap: 14px; padding: 16px 20px; border-radius: 10px; margin: 20px 0; font-size: 0.92rem; }
+    .alert-warn    { background: color-mix(in srgb, var(--accent3) 8%, transparent); border: 1px solid color-mix(in srgb, var(--accent3) 25%, transparent); color: var(--accent3); }
+    .alert-info    { background: color-mix(in srgb, var(--accent2) 8%, transparent); border: 1px solid color-mix(in srgb, var(--accent2) 25%, transparent); color: var(--accent2); }
+    .alert-success { background: color-mix(in srgb, var(--accent)  8%, transparent); border: 1px solid color-mix(in srgb, var(--accent)  25%, transparent); color: var(--accent); }
+    .alert-danger  { background: color-mix(in srgb, var(--danger)  8%, transparent); border: 1px solid color-mix(in srgb, var(--danger)  25%, transparent); color: var(--danger); }
+    .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .alert p { color: inherit; margin: 0; }
+
+    /* LIST STYLED */
+    .list-styled { list-style: none; padding: 0; margin: 16px 0; display: flex; flex-direction: column; gap: 10px; }
+    .list-styled li { font-size: 0.95rem; padding: 12px 16px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
+    .list-styled li .li-icon { flex-shrink: 0; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead th { background: var(--surface2); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); padding: 12px 16px; text-align: left; white-space: nowrap; }
+    tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:hover { background: var(--surface); }
+    tbody td { padding: 12px 16px; color: var(--text); }
+    tbody td:first-child { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--accent2); white-space: nowrap; }
+
+    /* SECTION DIVIDER */
+    .section-divider { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; margin-top: -24px; }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-divider-badge {
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      color: var(--accent);
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 8px 20px; border-radius: 999px; white-space: nowrap;
+    }
+
+    /* CHECKLIST */
+    .checklist { list-style: none; padding: 0; margin: 16px 0; display: flex; flex-direction: column; gap: 8px; }
+    .checklist li { font-size: 0.95rem; padding: 10px 16px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; color: var(--muted); }
+    .checklist li::before { content: '☐'; font-size: 1.1rem; color: var(--border); flex-shrink: 0; }
+
+    /* FILE TREE */
+    .file-tree { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin: 16px 0; font-family: 'DM Mono', monospace; font-size: 0.88rem; color: var(--muted); line-height: 2; white-space: pre; overflow-x: auto; }
+    .file-tree .folder { color: var(--accent3); }
+    .file-tree .file   { color: var(--accent2); }
+    .file-tree .main   { color: var(--accent); }
+
+    /* TIMELINE */
+    .timeline { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+    .timeline-item { display: flex; gap: 20px; align-items: flex-start; }
+    .timeline-label {
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+      padding: 4px 10px; border-radius: 6px; white-space: nowrap; flex-shrink: 0;
+      min-width: 90px; text-align: center; margin-top: 2px;
+    }
+    .timeline-label.blue  { color: var(--accent2); background: color-mix(in srgb, var(--accent2) 10%, transparent); border-color: color-mix(in srgb, var(--accent2) 25%, transparent); }
+    .timeline-label.orange{ color: var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 25%, transparent); }
+    .timeline-content { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; flex: 1; font-size: 0.93rem; }
+
+    /* PHASE CARDS */
+    .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 20px 0; }
+    .phase-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+    .phase-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .phase-card.mvp::before    { background: var(--accent3); }
+    .phase-card.evolve::before { background: var(--accent2); }
+    .phase-card.deploy::before { background: var(--accent); }
+    .phase-card h3 { margin-top: 0; color: var(--text); font-size: 1rem; margin-bottom: 10px; }
+    .phase-card p { font-size: 0.88rem; color: var(--muted); margin-bottom: 12px; }
+    .phase-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+    .phase-tag.mvp    { color: var(--accent3); background: color-mix(in srgb, var(--accent3) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent3) 25%, transparent); }
+    .phase-tag.evolve { color: var(--accent2); background: color-mix(in srgb, var(--accent2) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent2) 25%, transparent); }
+    .phase-tag.deploy { color: var(--accent);  background: color-mix(in srgb, var(--accent)  12%, transparent); border: 1px solid color-mix(in srgb, var(--accent)  25%, transparent); }
+
+    /* MEMBER CARDS */
+    .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 20px 0; }
+    .member-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+    .member-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 4px; }
+    .member-role { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .member-tech { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tech-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 999px; background: var(--surface2); border: 1px solid var(--border); color: var(--accent2); }
+    .tech-pill.green { color: var(--accent);  background: color-mix(in srgb, var(--accent)  8%, transparent); border-color: color-mix(in srgb, var(--accent)  20%, transparent); }
+    .tech-pill.yellow{ color: var(--accent3); background: color-mix(in srgb, var(--accent3) 8%, transparent); border-color: color-mix(in srgb, var(--accent3) 20%, transparent); }
+    .tech-pill.orange{ color: var(--accent4); background: color-mix(in srgb, var(--accent4) 8%, transparent); border-color: color-mix(in srgb, var(--accent4) 20%, transparent); }
+    .leader-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--accent3) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent3) 30%, transparent); color: var(--accent3); font-family: 'DM Mono', monospace; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 60px; text-align: center; color: var(--muted); font-size: 0.85rem; font-family: 'DM Mono', monospace; }
+
+    /* RESPONSIVO */
+    @media (max-width: 768px) {
+      header { padding: 48px 20px 40px; }
+      .container { padding: 40px 20px; }
+      footer { padding: 28px 20px; font-size: 0.78rem; }
+      h1 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+      h2 { font-size: 1.2rem; }
+      .subtitle { font-size: 0.95rem; }
+      .meta { flex-direction: column; gap: 10px; margin-top: 24px; }
+      .section-header { flex-wrap: wrap; gap: 10px; }
+      .section { margin-bottom: 48px; }
+      .card { padding: 18px 20px; }
+      .alert { align-items: flex-start; }
+      .table-wrap { border-radius: 8px; }
+      table { font-size: 0.8rem; min-width: 480px; }
+      thead th { padding: 10px 12px; font-size: 10px; }
+      tbody td { padding: 10px 12px; }
+      .file-tree { font-size: 0.75rem; padding: 16px; line-height: 1.8; }
+      .code-block { font-size: 0.78rem; padding: 16px; line-height: 1.8; }
+      .timeline-item { flex-direction: column; gap: 8px; }
+      .timeline-label { min-width: unset; width: fit-content; }
+      .checklist li { font-size: 0.88rem; padding: 10px 14px; }
+      .list-styled li { font-size: 0.88rem; padding: 10px 14px; }
+      .section-divider-badge { font-size: 10px; padding: 6px 14px; letter-spacing: 1px; }
+      .phase-grid { grid-template-columns: 1fr; }
+      .member-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    }
+    @media (max-width: 420px) {
+      header { padding: 36px 16px 32px; }
+      .container { padding: 32px 16px; }
+      h1 { font-size: 1.5rem; }
+      .badge { font-size: 9px; letter-spacing: 1px; }
+      .file-tree { font-size: 0.68rem; }
+      .code-block { font-size: 0.72rem; }
+      table { min-width: 400px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="badge">🏥 React · FastAPI · PostgreSQL · 7 pessoas · 3 fases</div>
+    <h1>Plano de Desenvolvimento —<br><span>UBSFacil</span></h1>
+    <p class="subtitle">
+      Sistema web para manter <em>pacientes informados</em> sobre medicamentos retirados na UBS, consultar <strong>atendimentos disponíveis</strong> em unidades próximas e verificar a <strong>disponibilidade de medicamentos</strong> em tempo real.
+    </p>
+    <div class="meta">
+      <div class="meta-item"><span class="dot" style="background:var(--accent)"></span> 7 membros na equipe</div>
+      <div class="meta-item"><span class="dot" style="background:var(--accent2)"></span> React + FastAPI + PostgreSQL</div>
+      <div class="meta-item"><span class="dot" style="background:var(--accent3)"></span> 3 fases de desenvolvimento</div>
+      
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══════════════════ VISÃO GERAL ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">📌 Visão Geral</span>
+      <h2>O que é o UBSFacil?</h2>
+    </div>
+    <div class="card">
+      <p>O <strong>UBSFacil</strong> é uma plataforma web voltada para <em>cidadãos e pacientes</em> que utilizam o sistema público de saúde. O objetivo é facilitar o acesso a informações essenciais — sem precisar ir pessoalmente até uma UBS só para descobrir se tem o medicamento disponível ou se há vaga no atendimento.</p>
+    </div>
+    <ul class="list-styled">
+      <li><span class="li-icon">📅</span><span><strong>Consulta de atendimento disponível:</strong> visualização de horários e vagas disponíveis em UBSs próximas</span></li>
+      <li><span class="li-icon">🔍</span><span><strong>Disponibilidade de medicamentos:</strong> busca por medicamento e unidade, com estoque atualizado em tempo real</span></li>
+      <li><span class="li-icon">📍</span><span><strong>UBSs próximas:</strong> localização e informações das unidades de saúde com base na localização do usuário</span></li>
+      <li><span class="li-icon">🔔</span><span><strong>Notificações:</strong> alertas quando um medicamento específico estiver disponível ou quando o estoque estiver acabando</span></li>
+    </ul>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <p><strong>Propósito social:</strong> O UBSFacil reduz deslocamentos desnecessários, economiza tempo dos pacientes e contribui para um sistema de saúde <em>mais eficiente e acessível</em>.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ STACK ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">🛠️ Stack Tecnológica</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num">🛠️ Tech Stack</span>
+      <h2>Tecnologias do Projeto</h2>
+    </div>
+    <div class="card">
+      <p>A stack foi definida com foco em <em>produtividade da equipe</em>, <em>escalabilidade</em> e boas práticas de mercado. Cada camada tem uma responsabilidade clara e bem separada.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🧩 Camada</th>
+            <th>🔧 Tecnologia</th>
+            <th>📋 Responsabilidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend</td><td><strong>React</strong></td><td>Interface do usuário, componentes visuais, experiência de navegação e integração com API</td></tr>
+          <tr><td>Backend</td><td><strong>FastAPI (Python)</strong></td><td>Rotas da API REST, lógica de negócio, autenticação e integração com banco de dados</td></tr>
+          <tr><td>Banco de Dados</td><td><strong>PostgreSQL</strong></td><td>Armazenamento e gerenciamento de dados persistentes (pacientes, medicamentos, UBSs)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <p><strong>Nota:</strong> O frontend em React se comunica com o backend via chamadas HTTP à API FastAPI.</p>
+    </div>
+
+    <h3>📦 Bibliotecas e ferramentas recomendadas</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🧩 Área</th>
+            <th>📦 Biblioteca / Ferramenta</th>
+            <th>🎯 Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend</td><td><strong>React Router</strong></td><td>Navegação entre páginas</td></tr>
+          <tr><td>Frontend</td><td><strong>Axios</strong></td><td>Chamadas HTTP para a API</td></tr>
+          <tr><td>Frontend</td><td><strong>Tailwind CSS</strong></td><td>Estilização dos componentes</td></tr>
+          <tr><td>Backend</td><td><strong>SQLAlchemy + Alembic</strong></td><td>ORM e migrations do banco de dados</td></tr>
+          <tr><td>Backend</td><td><strong>Pydantic</strong></td><td>Validação de dados nas rotas da API</td></tr>
+          <tr><td>Backend</td><td><strong>python-jose</strong></td><td>Autenticação com JWT</td></tr>
+          <tr><td>Backend</td><td><strong>pytest</strong></td><td>Testes automatizados do backend</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ EQUIPE ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">👥 Equipe</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">👥 Divisão</span>
+      <h2>Responsabilidades da Equipe</h2>
+    </div>
+    <div class="alert alert-warn">
+      <span class="alert-icon">💡</span>
+      <p><strong>Boa prática:</strong> Cada squad trabalha em <em>branches separadas</em> no Git. Os co-líderes fazem a revisão via <em>Pull Request</em> antes de qualquer merge na branch principal — isso evita conflitos e garante qualidade!</p>
+    </div>
+
+    <div class="member-grid">
+      <!-- FRONTEND -->
+      <div class="member-card">
+        <div class="member-name">Bruno Pereira</div>
+        <div class="member-role">Frontend</div>
+        <div class="member-tech">
+          <span class="tech-pill">React</span>
+          <span class="tech-pill">Tailwind</span>
+        </div>
+      </div>
+      <div class="member-card">
+        <div class="member-name">Vitor Hugo</div>
+        <div class="member-role">Frontend</div>
+        <div class="member-tech">
+          <span class="tech-pill">React</span>
+          <span class="tech-pill">Axios</span>
+          <span class="tech-pill">UX/UI</span>
+        </div>
+      </div>
+      <div class="member-card">
+        <div class="member-name">Amy Ribeiro</div>
+        <div class="member-role">Frontend</div>
+        <div class="member-tech">
+          <span class="tech-pill">React</span>
+          <span class="tech-pill">Componentes</span>
+          <span class="tech-pill">UX/UI</span>
+        </div>
+      </div>
+      <!-- BACKEND -->
+      <div class="member-card">
+        <div class="member-name">Igor Alves</div>
+        <div class="member-role">Backend</div>
+        <div class="member-tech">
+          <span class="tech-pill green">FastAPI</span>
+          <span class="tech-pill green">Python</span>
+          <span class="tech-pill green">Arquitetura</span>
+        </div>
+      </div>
+      <div class="member-card">
+        <div class="member-name">Julio Oliveira</div>
+        <div class="member-role">Backend</div>
+        <div class="member-tech">
+          <span class="tech-pill green">FastAPI</span>
+          <span class="tech-pill green">Auth / JWT</span>
+          <span class="tech-pill green">pytest</span>
+        </div>
+      </div>
+      <div class="member-card">
+        <div class="member-name">Gabriel Vieira</div>
+        <div class="member-role">Backend</div>
+        <div class="member-tech">
+          <span class="tech-pill green">FastAPI</span>
+          <span class="tech-pill green">Python</span>
+          <span class="tech-pill green">Rotas / API</span>
+        </div>
+      </div>
+      <!-- BANCO / INFRA -->
+      <div class="member-card">
+        <div class="member-name">Kaleb Domingos</div>
+        <div class="member-role">Banco de Dados</div>
+        <div class="member-tech">
+          <span class="tech-pill orange">PostgreSQL</span>
+          <span class="tech-pill orange">SQLAlchemy</span>
+          <span class="tech-pill orange">Alembic</span>
+        </div>
+      </div>
+      <div class="member-card">
+        <div class="member-name">Alessandra Freitas</div>
+        <div class="member-role">Monitoração de PR · Git</div>
+        <div class="member-tech">
+          <span class="tech-pill">Revisão de PR</span>
+          <span class="tech-pill">Git</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>🤝 Modelo de reuniões</h3>
+    <ul class="list-styled">
+      <li><span class="li-icon">🏢</span><span><strong>Encontros obrigatórios:</strong> 2 vezes por semana — acompanhamento de progresso, alinhamento entre squads e resolução de bloqueios</span></li>
+      <li><span class="li-icon">💻</span><span><strong>Encontros online:</strong> semanais às 18h — sincronização entre squads e atualização de status das tarefas</span></li>
+      <li><span class="li-icon">📝</span><span><strong>Decisões documentadas:</strong> toda decisão tomada em reunião deve ser registrada no canal da equipe (Slack, Discord ou Teams)</span></li>
+      <li><span class="li-icon">📋</span><span><strong>Backlog atualizado:</strong> após cada reunião, o backlog deve refletir o estado atual das tarefas</span></li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════ FASES ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">🗺️ Fases do Projeto</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">🗺️ Visão Geral</span>
+      <h2>As 3 Fases do UBSFacil</h2>
+    </div>
+    <div class="phase-grid">
+      <div class="phase-card mvp">
+        <span class="phase-tag mvp">Fase 1</span>
+        <h3>⚡ MVP — Produto Mínimo Viável</h3>
+        <p>Funcionalidades essenciais rodando de ponta a ponta — frontend, backend e banco conectados.</p>
+      </div>
+      <div class="phase-card evolve">
+        <span class="phase-tag evolve">Fase 2</span>
+        <h3>🔧 Evolução do Sistema</h3>
+        <p>Expansão das funcionalidades, melhorias de UX, testes automatizados e ambiente de staging.</p>
+      </div>
+      <div class="phase-card deploy">
+        <span class="phase-tag deploy">Fase 3</span>
+        <h3>🚀 Finalização do Sistema</h3>
+        <p>Conclusão dos módulos, testes finais e documentação completa do projeto.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 1 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">⚡ Fase 1</span>
+      <h2>MVP — Produto Mínimo Viável</h2>
+    </div>
+    <div class="card">
+      <p><strong>Objetivo:</strong> Entregar uma versão funcional básica com as funcionalidades essenciais do UBSFacil. O sistema deve rodar localmente de ponta a ponta, com o fluxo principal do paciente funcionando.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🧩 Área</th>
+            <th>✅ Entregáveis esperados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend</td><td>Páginas de login, busca de medicamentos e listagem de UBSs próximas; integração básica com a API</td></tr>
+          <tr><td>Backend</td><td>Rotas principais: autenticação, listagem de UBSs, consulta de medicamentos e histórico do paciente</td></tr>
+          <tr><td>Banco de Dados</td><td>Modelagem inicial: tabelas de pacientes, UBSs, medicamentos e estoques</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>✅ Critérios de conclusão da Fase 1</h3>
+    <ul class="checklist">
+      <li>Sistema rodando localmente de ponta a ponta (React ↔ FastAPI ↔ PostgreSQL)</li>
+      <li>Fluxo de login e autenticação do paciente funcionando</li>
+      <li>Consulta de medicamentos disponíveis retornando dados reais do banco</li>
+      <li>Listagem de UBSs próximas com informações básicas</li>
+      <li>Testes básicos realizados em ambiente de desenvolvimento</li>
+    </ul>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num">🔧 Fase 2</span>
+      <h2>Evolução do Sistema</h2>
+    </div>
+    <div class="card">
+      <p><strong>Objetivo:</strong> Expandir e refinar as funcionalidades do MVP, melhorando a qualidade do código, completando os módulos do sistema e preparando o ambiente de homologação.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🧩 Área</th>
+            <th>✅ Entregáveis esperados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend</td><td>Melhorias de UX/UI, responsividade mobile, sistema de notificações, filtros avançados de busca</td></tr>
+          <tr><td>Backend</td><td>Novas rotas (notificações, relatórios), validações robustas, tratamento de erros, testes automatizados</td></tr>
+          <tr><td>Banco de Dados</td><td>Otimização de queries, índices, novos modelos (notificações, logs), seeds com dados realistas</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>✅ Critérios de conclusão da Fase 2</h3>
+    <ul class="checklist">
+      <li>Sistema completo em ambiente de homologação / staging</li>
+      <li>Cobertura de testes automatizados ampliada (mínimo 60%)</li>
+      <li>Revisão de segurança realizada (autenticação, autorização, SQL injection)</li>
+      <li>Performance avaliada e otimizada (tempo de resposta das rotas principais)</li>
+      <li>Interface responsiva funcionando em mobile e desktop</li>
+      <li>Sistema de notificações operacional</li>
+    </ul>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num green">🚀 Fase 3</span>
+      <h2>Finalização do Sistema</h2>
+    </div>
+    <div class="card">
+      <p><strong>Objetivo:</strong> Concluir todos os módulos do sistema, realizar testes finais, revisar o código e preparar a documentação completa para apresentação.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🧩 Área</th>
+            <th>✅ Entregáveis esperados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend</td><td>Telas finalizadas, responsividade validada, integração completa com a API</td></tr>
+          <tr><td>Backend</td><td>Todas as rotas implementadas e testadas, autenticação validada, erros tratados</td></tr>
+          <tr><td>Banco de Dados</td><td>Modelagem final validada, seeds com dados realistas, queries otimizadas</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    
+
+    <h3>✅ Critérios de conclusão da Fase 3</h3>
+    <ul class="checklist">
+      <li>Todos os módulos do sistema funcionando de ponta a ponta</li>
+      <li>Testes finais realizados e bugs críticos corrigidos</li>
+      <li>Documentação técnica completa e atualizada</li>
+      <li>Documentação técnica atualizada e revisada</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════ ESTRUTURA DE ARQUIVOS ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">🗂️ Estrutura do Projeto</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">🗂️ Arquivos</span>
+      <h2>Estrutura do Repositório</h2>
+    </div>
+    <div class="card">
+      <p>Organize assim a estrutura do repositório no GitHub. Cada squad trabalha em sua <em>pasta separada</em> — sem misturar código de áreas diferentes sem um Pull Request!</p>
+    </div>
+    <div class="file-tree"><span class="folder">ubsfacil/</span>
+│
+├── <span class="main">README.md</span>                    ← visão geral e como rodar o projeto
+│
+├── <span class="folder">frontend/</span>                   ← projeto React (Bruno, Vitor e Amy)
+│   ├── <span class="folder">src/</span>
+│   │   ├── <span class="folder">components/</span>         ← componentes reutilizáveis
+│   │   ├── <span class="folder">pages/</span>              ← páginas da aplicação
+│   │   ├── <span class="folder">services/</span>           ← chamadas à API (Axios)
+│   │   └── <span class="file">App.jsx</span>
+│   ├── <span class="folder">public/</span>
+│   └── <span class="file">package.json</span>
+│
+├── <span class="folder">backend/</span>                    ← projeto FastAPI (Igor, Julio e Gabriel)
+│   ├── <span class="folder">app/</span>
+│   │   ├── <span class="folder">routers/</span>            ← rotas da API
+│   │   ├── <span class="folder">models/</span>             ← modelos SQLAlchemy
+│   │   ├── <span class="folder">schemas/</span>            ← schemas Pydantic
+│   │   ├── <span class="folder">services/</span>           ← lógica de negócio
+│   │   └── <span class="file">main.py</span>              ← entrada da aplicação
+│   ├── <span class="folder">tests/</span>                  ← testes com pytest
+│   └── <span class="file">requirements.txt</span>
+│
+├── <span class="folder">database/</span>                   ← banco de dados (Kaleb)
+│   ├── <span class="folder">migrations/</span>             ← migrations Alembic
+│   └── <span class="folder">seeds/</span>                  ← dados iniciais para dev
+│
+│   ├── <span class="folder">docker/</span>                 ← Dockerfiles e docker-compose.yml
+│   └── <span class="folder">scripts/</span>                ← scripts de deploy e manutenção
+│
+└── <span class="folder">docs/</span>                       ← documentação adicional
+    ├── <span class="file">arquitetura.md</span>
+    └── <span class="file">deploy.md</span></div>
+  </div>
+
+  <!-- ═══════════════════ FLUXO DE TRABALHO ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num">🔄 Workflow</span>
+      <h2>Fluxo de Trabalho da Equipe</h2>
+    </div>
+    <div class="card">
+      <p>Siga sempre este fluxo para qualquer funcionalidade nova — do planejamento ao deploy. Isso garante <em>qualidade</em>, <em>rastreabilidade</em> e menos dor de cabeça na integração!</p>
+    </div>
+    <ul class="list-styled">
+      <li><span class="li-icon">1️⃣</span><span><strong>Planejamento:</strong> defina a task no backlog com critérios de aceite claros — o que precisa funcionar para considerar pronto?</span></li>
+      <li><span class="li-icon">2️⃣</span><span><strong>Desenvolvimento:</strong> cada squad trabalha em <em>branches separadas</em> — nunca diretamente na branch <code>main</code></span></li>
+      <li><span class="li-icon">3️⃣</span><span><strong>Code Review:</strong> abra um Pull Request e peça revisão de pelo menos <em>1 outro membro</em> da equipe antes do merge</span></li>
+      <li><span class="li-icon">4️⃣</span><span><strong>Testes:</strong> rode os testes unitários e de integração antes de qualquer merge — sem testes quebrando!</span></li>
+      <li><span class="li-icon">5️⃣</span><span><strong>Staging:</strong> faça o deploy em ambiente de homologação e valide o funcionamento com a equipe</span></li>
+      <li><span class="li-icon">6️⃣</span><span><strong>Produção:</strong> deploy controlado com plano de rollback caso algo dê errado</span></li>
+    </ul>
+
+    <div class="code-block"><span class="comment"># Fluxo resumido no terminal</span>
+<span class="kw">git checkout</span> <span class="str">-b feature/consulta-medicamentos</span>
+<span class="comment"># ... desenvolve a funcionalidade ...</span>
+<span class="kw">git add</span> . && <span class="kw">git commit</span> <span class="str">-m "feat: adiciona rota de consulta de medicamentos"</span>
+<span class="kw">git push origin</span> <span class="str">feature/consulta-medicamentos</span>
+<span class="comment"># abre Pull Request no GitHub → code review → merge!</span></div>
+  </div>
+
+  <!-- ═══════════════════ CRONOGRAMA ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">📅 Cronograma</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">📅 Fase 1</span>
+      <h2>MVP — Planejamento e Construção</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-label">Semana 1</span>
+        <div class="timeline-content">Reunião de kickoff; definir ferramentas de comunicação e gestão; configurar repositório no GitHub; instalar e configurar ambiente local (Node, Python, PostgreSQL)</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label">Semana 2</span>
+        <div class="timeline-content"><strong>Kaleb</strong> cria a modelagem inicial do banco; <strong>Igor</strong> configura estrutura base do FastAPI; <strong>Bruno</strong> inicializa o projeto React com roteamento</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label">Semana 3</span>
+        <div class="timeline-content"><strong>Igor e Julio</strong> desenvolvem as rotas de autenticação e consulta de medicamentos; <strong>Bruno e Vitor</strong> criam as primeiras páginas e conectam à API</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label">Semana 4</span>
+        <div class="timeline-content">Integração completa frontend ↔ backend ↔ banco; testes do fluxo principal; revisão conjunta da equipe; correção de bugs críticos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num">📅 Fase 2</span>
+      <h2>Evolução — Expansão e Qualidade</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-label blue">Semana 5</span>
+        <div class="timeline-content"><strong>Vitor</strong> aplica melhorias de UX e responsividade mobile; <strong>Julio</strong> adiciona validações robustas e tratamento de erros nas rotas</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label blue">Semana 6</span>
+        <div class="timeline-content"><strong>Kaleb</strong> otimiza queries e adiciona índices no banco; <strong>Bruno</strong> implementa o sistema de notificações no frontend</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label blue">Semana 7</span>
+        <div class="timeline-content"><strong>Julio</strong> escreve testes automatizados com pytest; revisão de segurança realizada pela equipe; configuração do ambiente de staging</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label blue">Semana 8</span>
+        <div class="timeline-content">Deploy no ambiente de staging; validação final com toda a equipe; ajustes finais de performance; aprovação para Fase 3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num green">📅 Fase 3</span>
+      <h2>Fase 3 — Finalização e Apresentação</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-label" style="color:var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 25%, transparent);">Semana 9</span>
+        <div class="timeline-content">Finalização dos módulos restantes; revisão geral do código; correção de bugs identificados nas semanas anteriores</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label" style="color:var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 25%, transparent);">Semana 10</span>
+        <div class="timeline-content"><strong>Igor Alves e Julio Oliveira</strong> finalizam as rotas restantes do backend; testes de integração completos entre frontend, backend e banco de dados</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label" style="color:var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 25%, transparent);">Semana 11</span>
+        <div class="timeline-content">Testes finais com toda a equipe; validação do fluxo completo do usuário; ajustes de UX e performance</div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label" style="color:var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 25%, transparent);">Semana 12</span>
+        <div class="timeline-content">🏁 <strong>UBSFacil finalizado!</strong> Documentação técnica concluída; preparação para apresentação final; retrospectiva do projeto</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ FERRAMENTAS ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">🔧 Ferramentas</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num orange">🔧 Tools</span>
+      <h2>Ferramentas Recomendadas</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🛠️ Ferramenta</th>
+            <th>🎯 Para quê</th>
+            <th>🔗 Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>VS Code</td><td>Editor de código gratuito e amigável — ideal para Python e React</td><td><code>code.visualstudio.com</code></td></tr>
+          <tr><td>Insomnia / Postman</td><td>Testar as rotas da API FastAPI antes de conectar ao frontend</td><td><code>insomnia.rest</code></td></tr>
+          <tr><td>DBeaver</td><td>Visualizar e gerenciar o banco de dados PostgreSQL com interface gráfica</td><td><code>dbeaver.io</code></td></tr>
+          <tr><td>GitHub</td><td>Versionamento de código, Pull Requests e colaboração em equipe</td><td><code>github.com</code></td></tr>
+          <tr><td>Figma <em>(opcional)</em></td><td>Prototipar as telas do frontend antes de codar</td><td><code>figma.com</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ CHECKLIST GERAL ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">✅ Checklist Geral</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num green">✅ MVP</span>
+      <h2>Checklist — Fase 1 (MVP)</h2>
+    </div>
+    <ul class="checklist">
+      <li>Repositório criado e estrutura base configurada no GitHub</li>
+      <li>Ambiente de desenvolvimento local documentado no README</li>
+      <li>Modelagem de banco de dados inicial concluída (pacientes, UBSs, medicamentos, estoques)</li>
+      <li>API FastAPI com rotas principais implementadas (autenticação, medicamentos, UBSs)</li>
+      <li>Frontend React com páginas de login, busca e histórico funcionais</li>
+      <li>Integração frontend ↔ backend ↔ banco validada localmente</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num">✅ Evolução</span>
+      <h2>Checklist — Fase 2 (Evolução)</h2>
+    </div>
+    <ul class="checklist">
+      <li>Módulos adicionais desenvolvidos (notificações, filtros avançados)</li>
+      <li>Testes automatizados com pytest implementados (mínimo 60% de cobertura)</li>
+      <li>Revisão de segurança realizada (JWT, SQL injection, CORS)</li>
+      <li>Performance avaliada e otimizada (queries e tempo de resposta)</li>
+      <li>Interface responsiva funcionando em dispositivos móveis</li>
+      <li>Ambiente de staging configurado e validado</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num green">✅ Produção</span>
+      <h2>Checklist — Fase 3 (Finalização)</h2>
+    </div>
+    <ul class="checklist">
+      <li>Todos os módulos implementados e funcionando de ponta a ponta</li>
+      <li>Testes finais realizados e aprovados pela equipe</li>
+      <li>Bugs críticos corrigidos</li>
+      <li>Documentação técnica final atualizada e revisada</li>
+      <li>Apresentação preparada e ensaiada</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════ DICAS ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">💡 Dicas</span>
+      <h2>Dicas de Ouro para o Time</h2>
+    </div>
+    <ul class="list-styled">
+      <li><span class="li-icon">🚫</span><span><strong>Nunca faça push direto na main</strong> — sempre crie uma branch e abra um Pull Request, sem exceção!</span></li>
+      <li><span class="li-icon">🔑</span><span><strong>Jamais suba credenciais no Git</strong> — use variáveis de ambiente com <code>.env</code> e adicione ao <code>.gitignore</code></span></li>
+      <li><span class="li-icon">💬</span><span><strong>Commits com mensagens claras</strong> — use o padrão <em>Conventional Commits</em>: <code>feat:</code>, <code>fix:</code>, <code>docs:</code>, <code>refactor:</code></span></li>
+      <li><span class="li-icon">📖</span><span><strong>Documente as rotas da API</strong> — o FastAPI gera documentação automática em <code>/docs</code>. Mantenha as descrições atualizadas!</span></li>
+      <li><span class="li-icon">🧪</span><span><strong>Teste antes de pedir review</strong> — rode os testes localmente antes de abrir o Pull Request. Economiza tempo de todos!</span></li>
+      <li><span class="li-icon">📡</span><span><strong>Comunique bloqueios rápido</strong> — se travar em algo por mais de 2h, avise no canal da equipe. Pedir ajuda é sinal de maturidade!</span></li>
+    </ul>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">🚀</span>
+      <p><strong>Bora construir!</strong> O UBSFacil tem um propósito real — vai ajudar pacientes de verdade. Cada linha de código importa. Boa sorte, equipe! 🏥💚</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ PAPÉIS NA APRESENTAÇÃO ═══════════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">🎤 Dia da Apresentação</span></div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">🎤 Papéis</span>
+      <h2>Quem Faz o Quê na Apresentação</h2>
+    </div>
+    <div class="card">
+      <p>Cada membro da equipe tem um papel definido para o dia da apresentação — assim ninguém fica perdido e tudo flui com <em>organização</em> e <em>profissionalismo</em>. Também temos <strong>substitutos</strong> definidos caso alguém não consiga comparecer!</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#️⃣</th>
+            <th>👤 Membro</th>
+            <th>🎯 Papel na Apresentação</th>
+            <th>🔄 Substituto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Kaleb Domingos</strong></td>
+            <td>🎙️ Abertura e encerramento — apresenta o projeto no início e fecha com as considerações finais</td>
+            <td><em>Vitor Hugo</em></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Bruno Pereira</strong></td>
+            <td>🖥️ Apresentação das telas e do site — navega pelo sistema ao vivo, demonstrando as funcionalidades para a banca</td>
+            <td><em>Alessandra Freitas</em></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Amy Ribeiro</strong></td>
+            <td>📸 Fotógrafo / Registro — registra o momento da apresentação com fotos da equipe e da banca</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Igor Alves</strong></td>
+            <td>📋 Controle do checklist — acompanha os pontos que precisam ser cobertos e sinaliza para a equipe</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Julio Oliveira</strong></td>
+            <td>🔧 Suporte técnico / Assistente — garante que o ambiente está funcionando e resolve qualquer imprevisto técnico</td>
+            <td><em>Gabriel Vieira</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>🔄 Substitutos definidos</h3>
+    <ul class="list-styled">
+      <li><span class="li-icon">🎙️</span><span>Se <strong>Kaleb Domingos</strong> faltar → <em>Vitor Hugo</em> assume a abertura e o encerramento</span></li>
+      <li><span class="li-icon">🖥️</span><span>Se <strong>Bruno Pereira</strong> faltar → <em>Alessandra Freitas</em> assume a apresentação das telas ao vivo</span></li>
+      <li><span class="li-icon">🔧</span><span>Se <strong>Julio Oliveira</strong> faltar → <em>Gabriel Vieira</em> assume o suporte técnico</span></li>
+    </ul>
+
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <p><strong>Atenção:</strong> Se souber que não vai conseguir comparecer, <em>avise a equipe com antecedência</em> para que o substituto possa se preparar direitinho! Combinado?</p>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">🚀</span>
+      <p><strong>Bora arrasar!</strong> Com os papéis bem definidos, a apresentação do UBSFacil vai ser incrível. Boa sorte, equipe! 🏥💚</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Plano de Desenvolvimento — UBSFacil · React + FastAPI + PostgreSQL · 7 pessoas · 3 Fases · 2026
+</footer>
+
+</body>
+</html>

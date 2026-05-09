@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📅 Cronograma de Tarefas — UBSFacil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #0b0f12;
+      --surface:  #131820;
+      --surface2: #1a2130;
+      --border:   #1f2e3d;
+      --accent:   #3dd68c;
+      --accent2:  #4da6ff;
+      --accent3:  #f0c94a;
+      --accent4:  #ff7b54;
+      --text:     #dce8f5;
+      --muted:    #5c7a96;
+      --danger:   #ff5f6d;
+      --code-bg:  #0e1419;
+
+      /* cores por pessoa */
+      --bruno:      #a78bfa;
+      --vitor:      #38bdf8;
+      --amy:        #f472b6;
+      --igor:       #3dd68c;
+      --julio:      #4ade80;
+      --gabriel:    #86efac;
+      --kaleb:      #fb923c;
+      --alessandra: #fbbf24;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.75; min-height: 100vh; }
+
+    /* HEADER */
+    header {
+      position: relative; overflow: hidden;
+      padding: 80px 60px 60px; max-width: 1200px; margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse at 15% 60%, rgba(61,214,140,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(77,166,255,0.07) 0%, transparent 55%);
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px);
+      opacity: 0.10;
+    }
+    .header-inner { position: relative; }
+    .badge {
+      display: inline-block;
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      color: var(--accent);
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 14px; border-radius: 999px; margin-bottom: 20px;
+    }
+    h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+    h1 span { color: var(--accent); }
+    .subtitle { color: var(--muted); font-size: 1.05rem; max-width: 660px; }
+    .meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; }
+    .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); }
+    .meta-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* LEGEND */
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0 0; }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--muted); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* CONTAINER */
+    .container { padding: 60px; max-width: 1200px; margin: 0 auto; }
+
+    /* SECTION */
+    .section { margin-bottom: 72px; opacity: 0; transform: translateY(24px); animation: fadeUp 0.5s forwards; }
+    .section:nth-child(1)  { animation-delay: 0.05s; }
+    .section:nth-child(2)  { animation-delay: 0.10s; }
+    .section:nth-child(3)  { animation-delay: 0.15s; }
+    .section:nth-child(4)  { animation-delay: 0.20s; }
+    .section:nth-child(5)  { animation-delay: 0.25s; }
+    .section:nth-child(6)  { animation-delay: 0.30s; }
+    .section:nth-child(7)  { animation-delay: 0.35s; }
+    .section:nth-child(8)  { animation-delay: 0.40s; }
+    .section:nth-child(9)  { animation-delay: 0.45s; }
+    .section:nth-child(10) { animation-delay: 0.50s; }
+    .section:nth-child(11) { animation-delay: 0.55s; }
+    .section:nth-child(12) { animation-delay: 0.60s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+    .step-num {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 6px; white-space: nowrap;
+    }
+    .step-num.yellow { color: var(--accent3); background: color-mix(in srgb, var(--accent3) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent3) 25%, transparent); }
+    .step-num.blue   { color: var(--accent2); background: color-mix(in srgb, var(--accent2) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent2) 25%, transparent); }
+    .step-num.green  { color: var(--accent);  background: color-mix(in srgb, var(--accent)  10%, transparent); border: 1px solid color-mix(in srgb, var(--accent)  25%, transparent); }
+    .step-num.orange { color: var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent4) 25%, transparent); }
+
+    h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+    h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--accent2); margin: 24px 0 12px; }
+    p  { color: var(--text); margin-bottom: 14px; font-size: 0.97rem; }
+    p:last-child { margin-bottom: 0; }
+    em     { color: var(--accent3); font-style: normal; font-weight: 500; }
+    strong { color: #fff; font-weight: 500; }
+    code   { font-family: 'DM Mono', monospace; font-size: 0.85em; background: var(--surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; color: var(--accent2); }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; }
+
+    /* SECTION DIVIDER */
+    .section-divider { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; margin-top: -24px; }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-divider-badge {
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      color: var(--accent);
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 8px 20px; border-radius: 999px; white-space: nowrap;
+    }
+    .section-divider-badge.blue   { color: var(--accent2); background: color-mix(in srgb, var(--accent2) 10%, transparent); border-color: color-mix(in srgb, var(--accent2) 30%, transparent); }
+    .section-divider-badge.orange { color: var(--accent4); background: color-mix(in srgb, var(--accent4) 10%, transparent); border-color: color-mix(in srgb, var(--accent4) 30%, transparent); }
+
+    /* WEEK CARD */
+    .week-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .week-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 24px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .week-label {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 6px; white-space: nowrap;
+    }
+    .week-label.mvp    { color: var(--accent3); background: color-mix(in srgb, var(--accent3) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent3) 25%, transparent); }
+    .week-label.evolve { color: var(--accent2); background: color-mix(in srgb, var(--accent2) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent2) 25%, transparent); }
+    .week-label.deploy { color: var(--accent);  background: color-mix(in srgb, var(--accent)  12%, transparent); border: 1px solid color-mix(in srgb, var(--accent)  25%, transparent); }
+    .week-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+    .week-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* TASK ROW */
+    .task-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .task-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-family: 'DM Mono', monospace; font-weight: 700;
+      flex-shrink: 0; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .task-info { flex: 1; min-width: 0; }
+    .task-name {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .task-squad {
+      font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+    .task-desc { font-size: 0.88rem; color: var(--text); line-height: 1.55; }
+
+    /* avatar colors */
+    .av-bruno      { background: color-mix(in srgb, var(--bruno)      15%, transparent); color: var(--bruno);      border: 1px solid color-mix(in srgb, var(--bruno)      30%, transparent); }
+    .av-vitor      { background: color-mix(in srgb, var(--vitor)      15%, transparent); color: var(--vitor);      border: 1px solid color-mix(in srgb, var(--vitor)      30%, transparent); }
+    .av-amy        { background: color-mix(in srgb, var(--amy)        15%, transparent); color: var(--amy);        border: 1px solid color-mix(in srgb, var(--amy)        30%, transparent); }
+    .av-igor       { background: color-mix(in srgb, var(--igor)       15%, transparent); color: var(--igor);       border: 1px solid color-mix(in srgb, var(--igor)       30%, transparent); }
+    .av-julio      { background: color-mix(in srgb, var(--julio)      15%, transparent); color: var(--julio);      border: 1px solid color-mix(in srgb, var(--julio)      30%, transparent); }
+    .av-gabriel    { background: color-mix(in srgb, var(--gabriel)    15%, transparent); color: var(--gabriel);    border: 1px solid color-mix(in srgb, var(--gabriel)    30%, transparent); }
+    .av-kaleb      { background: color-mix(in srgb, var(--kaleb)      15%, transparent); color: var(--kaleb);      border: 1px solid color-mix(in srgb, var(--kaleb)      30%, transparent); }
+    .av-alessandra { background: color-mix(in srgb, var(--alessandra) 15%, transparent); color: var(--alessandra); border: 1px solid color-mix(in srgb, var(--alessandra) 30%, transparent); }
+
+    /* name colors */
+    .nm-bruno      { color: var(--bruno); }
+    .nm-vitor      { color: var(--vitor); }
+    .nm-amy        { color: var(--amy); }
+    .nm-igor       { color: var(--igor); }
+    .nm-julio      { color: var(--julio); }
+    .nm-gabriel    { color: var(--gabriel); }
+    .nm-kaleb      { color: var(--kaleb); }
+    .nm-alessandra { color: var(--alessandra); }
+
+    /* ALERT */
+    .alert { display: flex; gap: 14px; padding: 16px 20px; border-radius: 10px; margin: 20px 0; font-size: 0.92rem; }
+    .alert-success { background: color-mix(in srgb, var(--accent) 8%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); color: var(--accent); }
+    .alert-warn    { background: color-mix(in srgb, var(--accent3) 8%, transparent); border: 1px solid color-mix(in srgb, var(--accent3) 25%, transparent); color: var(--accent3); }
+    .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .alert p { color: inherit; margin: 0; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 60px; text-align: center; color: var(--muted); font-size: 0.85rem; font-family: 'DM Mono', monospace; }
+
+    @media (max-width: 768px) {
+      header { padding: 48px 20px 40px; }
+      .container { padding: 40px 20px; }
+      footer { padding: 28px 20px; }
+      h1 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+      h2 { font-size: 1.2rem; }
+      .meta { flex-direction: column; gap: 10px; margin-top: 24px; }
+      .legend { gap: 8px; }
+      .section { margin-bottom: 48px; }
+      .week-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .week-body { padding: 14px 16px; gap: 10px; }
+      .task-row { flex-direction: column; gap: 8px; }
+      .task-avatar { width: 28px; height: 28px; font-size: 0.65rem; }
+    }
+    @media (max-width: 420px) {
+      header { padding: 36px 16px 32px; }
+      .container { padding: 32px 16px; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="badge">📅 Cronograma individual · 12 semanas · 8 pessoas · 3 fases</div>
+    <h1>Cronograma de Tarefas —<br><span>UBSFacil</span></h1>
+    <p class="subtitle">Distribuição individual de tarefas semana a semana para cada membro da equipe, cobrindo as <em>3 fases</em> do projeto — MVP, Evolução e Deploy.</p>
+    <div class="meta">
+      <div class="meta-item"><span class="dot" style="background:var(--accent3)"></span> Fase 1: Semanas 1–4 (MVP)</div>
+      <div class="meta-item"><span class="dot" style="background:var(--accent2)"></span> Fase 2: Semanas 5–8 (Evolução)</div>
+      <div class="meta-item"><span class="dot" style="background:var(--accent)"></span>  Fase 3: Semanas 9–12 (Deploy)</div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--bruno)"></span> Bruno Pereira</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--vitor)"></span> Vitor Hugo</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--amy)"></span> Amy Ribeiro</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--igor)"></span> Igor Alves</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--julio)"></span> Julio Oliveira</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--gabriel)"></span> Gabriel Vieira</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--kaleb)"></span> Kaleb Domingos</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--alessandra)"></span> Alessandra Freitas</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══════════════ FASE 1 — MVP ═══════════════ -->
+  <div class="section-divider"><span class="section-divider-badge">⚡ Fase 1 — MVP</span></div>
+
+  <!-- SEMANA 1 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">⚡ MVP</span>
+      <h2>Semana 1 — Kickoff e Configuração do Ambiente</h2>
+    </div>
+    <div class="card">
+      <p>A primeira semana é dedicada a <em>alinhar a equipe</em>, definir ferramentas e garantir que todos consigam rodar o projeto localmente. Nenhum código de funcionalidade ainda — foco total em preparação!</p>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label mvp">Semana 1</span>
+        <span class="week-title">🚀 Kickoff — Ambiente, Repositório e Planejamento</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira <span style="font-weight:300;color:var(--muted)">· Frontend</span></div>
+            <div class="task-squad">Frontend · Infraestrutura</div>
+            <div class="task-desc">Criar o repositório no GitHub, definir a estrutura de branches (<code>main</code>, <code>dev</code>) e configurar o projeto React com Vite + Tailwind CSS</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo <span style="font-weight:300;color:var(--muted)">· Frontend</span></div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Instalar e configurar o ambiente local (Node.js, npm); clonar o repositório e rodar o projeto React; estudar a estrutura de pastas definida por Bruno</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro <span style="font-weight:300;color:var(--muted)">· Frontend</span></div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Instalar e configurar o ambiente local; estudar o Figma ou referências visuais do UBSFacil; levantar os componentes de UI que serão necessários (botões, cards, formulários)</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves <span style="font-weight:300;color:var(--muted)">· Backend</span></div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Inicializar o projeto FastAPI com estrutura de pastas (<code>routers/</code>, <code>models/</code>, <code>schemas/</code>, <code>services/</code>); configurar o <code>requirements.txt</code> e o ambiente virtual Python</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira <span style="font-weight:300;color:var(--muted)">· Backend</span></div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Instalar Python, configurar o ambiente virtual e clonar o repositório; estudar a estrutura do FastAPI definida por Igor; configurar o Insomnia para testar rotas</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira <span style="font-weight:300;color:var(--muted)">· Backend</span></div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Instalar Python e configurar o ambiente local; estudar a documentação do FastAPI; entender o fluxo de rotas e como o Pydantic valida os dados</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos <span style="font-weight:300;color:var(--muted)">· Banco de Dados</span></div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Instalar PostgreSQL e DBeaver localmente; esboçar o diagrama entidade-relacionamento (ER) inicial com as entidades: <strong>Paciente</strong>, <strong>UBS</strong>, <strong>Medicamento</strong>, <strong>Estoque</strong> e <strong>Retirada</strong></div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas <span style="font-weight:300;color:var(--muted)">· Banco de Dados · Infra</span></div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Instalar Docker Desktop localmente; esboçar o <code>docker-compose.yml</code> inicial com os serviços (frontend, backend, banco); revisar o diagrama ER com Kaleb</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 2 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">⚡ MVP</span>
+      <h2>Semana 2 — Modelagem e Base do Projeto</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label mvp">Semana 2</span>
+        <span class="week-title">🗄️ Banco de Dados, Estrutura do Backend e Primeiras Telas</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Criar o sistema de roteamento com React Router (páginas: Login, Home, Busca de Medicamentos, UBSs Próximas, Histórico); criar o layout base com Navbar e estrutura de páginas</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Desenvolver os componentes base de UI: <strong>Button</strong>, <strong>Input</strong>, <strong>Card</strong> e <strong>Modal</strong> reutilizáveis com Tailwind CSS</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Desenvolver a tela de <strong>Login</strong> com formulário de CPF e senha; criar o componente de <strong>Navbar</strong> com links de navegação</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Configurar a conexão do FastAPI com o PostgreSQL via SQLAlchemy; criar o arquivo de configuração de banco (<code>database.py</code>) e o modelo base de sessão</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar os modelos SQLAlchemy de <strong>Paciente</strong> e <strong>UBS</strong> com base no diagrama ER; criar as migrations iniciais com Alembic</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar os modelos SQLAlchemy de <strong>Medicamento</strong>, <strong>Estoque</strong> e <strong>Retirada</strong>; adicionar às migrations criadas por Julio</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Revisar e validar o diagrama ER final; rodar as migrations no banco local e verificar se as tabelas foram criadas corretamente no DBeaver</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Criar os seeds iniciais de dados de teste (UBSs e medicamentos fictícios) para popular o banco durante o desenvolvimento; testar o Docker Compose com os serviços básicos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">⚡ MVP</span>
+      <h2>Semana 3 — Rotas da API e Telas Principais</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label mvp">Semana 3</span>
+        <span class="week-title">🔌 API em desenvolvimento e telas conectando</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Configurar o Axios com a <code>baseURL</code> da API; implementar a tela de <strong>Busca de Medicamentos</strong> com campo de busca e listagem de resultados</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Desenvolver a tela de <strong>UBSs Próximas</strong> com listagem de unidades e suas informações básicas (nome, endereço, horário de funcionamento)</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Desenvolver a tela de <strong>Histórico de Retiradas</strong> do paciente com listagem de medicamentos retirados, data e UBS correspondente</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar a rota de <strong>autenticação</strong>: <code>POST /auth/login</code> com geração de token JWT e <code>GET /auth/me</code> para retornar dados do paciente autenticado</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar as rotas de <strong>UBSs</strong>: <code>GET /ubs</code> (listar todas) e <code>GET /ubs/{id}</code> (detalhes de uma unidade); criar os schemas Pydantic correspondentes</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar as rotas de <strong>Medicamentos</strong>: <code>GET /medicamentos</code> (listar com filtro por nome) e <code>GET /medicamentos/{id}/disponibilidade</code>; criar os schemas Pydantic</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Popular o banco com seeds mais completos (pacientes, medicamentos e estoques variados); verificar integridade referencial entre as tabelas no DBeaver</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Criar seeds de <strong>Retiradas</strong> com histórico fictício por paciente; garantir que o Docker Compose sobe todos os serviços corretamente do zero</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 4 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num yellow">⚡ MVP</span>
+      <h2>Semana 4 — Integração e Validação do MVP</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label mvp">Semana 4</span>
+        <span class="week-title">🔗 Frontend ↔ Backend ↔ Banco integrados e validados</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Conectar a tela de login ao endpoint <code>POST /auth/login</code>; implementar o armazenamento do token JWT e o redirecionamento pós-login; proteger rotas privadas</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Conectar a tela de <strong>UBSs Próximas</strong> ao endpoint <code>GET /ubs</code>; exibir dados reais do banco; implementar estado de carregamento (loading) e de erro</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Conectar a tela de <strong>Busca de Medicamentos</strong> e <strong>Histórico</strong> aos endpoints da API; exibir dados reais; implementar estados de loading e erro</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar a rota de <strong>Histórico do Paciente</strong>: <code>GET /paciente/historico</code> retornando as retiradas do paciente autenticado; configurar o CORS para aceitar requisições do frontend</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Testar todas as rotas implementadas no Insomnia com dados reais do banco; documentar os endpoints no <code>/docs</code> do FastAPI; corrigir bugs encontrados</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Validar o retorno de todas as rotas de medicamentos com dados reais; ajustar queries SQLAlchemy para retornar apenas medicamentos com estoque disponível na UBS consultada</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Fazer testes de integridade no banco com os dados de seed; verificar se todas as queries do backend retornam os resultados esperados; corrigir inconsistências nos dados</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Garantir que o Docker Compose sobe o ambiente completo do zero; testar o fluxo ponta a ponta (login → busca → histórico) no ambiente dockerizado local</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">✅</span>
+      <p><strong>Marco da Fase 1:</strong> ao final da Semana 4 o MVP deve estar rodando de ponta a ponta localmente — React ↔ FastAPI ↔ PostgreSQL com o fluxo principal funcionando!</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════ FASE 2 — EVOLUÇÃO ═══════════════ -->
+  <div class="section-divider"><span class="section-divider-badge blue">🔧 Fase 2 — Evolução</span></div>
+
+  <!-- SEMANA 5 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num blue">🔧 Evolução</span>
+      <h2>Semana 5 — UX/UI e Novas Funcionalidades</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label evolve">Semana 5</span>
+        <span class="week-title">✨ Melhorias visuais e novas rotas</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Implementar a tela de <strong>detalhes da UBS</strong> (horários, especialidades, medicamentos disponíveis); melhorar o layout geral aplicando espaçamentos e hierarquia visual consistente</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Tornar todas as telas <strong>responsivas</strong> para dispositivos móveis usando Tailwind CSS; testar em diferentes tamanhos de tela via DevTools</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Criar o componente de <strong>Notificação / Toast</strong> para feedback visual de ações (sucesso, erro, aviso); aplicar em todas as interações do usuário</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar rota <code>GET /ubs/{id}/disponibilidade</code> retornando os medicamentos disponíveis em uma UBS específica com quantidade em estoque; adicionar paginação nas listagens</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Adicionar <strong>validações robustas</strong> com Pydantic em todas as rotas (campos obrigatórios, formatos, limites); retornar mensagens de erro claras e padronizadas</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar rota <code>POST /notificacoes/subscribe</code> para o paciente se inscrever em alertas de disponibilidade de um medicamento específico</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Criar a tabela de <strong>Notificações</strong> no banco com migration Alembic; adicionar índices nas colunas mais consultadas (nome do medicamento, UBS, CPF do paciente)</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Criar seeds de notificações para teste; atualizar o <code>docker-compose.yml</code> com variáveis de ambiente via arquivo <code>.env</code>; testar rebuilds dos containers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 6 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num blue">🔧 Evolução</span>
+      <h2>Semana 6 — Filtros, Otimização e Testes Iniciais</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label evolve">Semana 6</span>
+        <span class="week-title">🔍 Filtros avançados, queries otimizadas e primeiros testes</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Implementar <strong>filtros avançados</strong> na busca de medicamentos (filtro por UBS, por disponibilidade, por nome); adicionar feedback de "nenhum resultado encontrado"</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Implementar a tela de <strong>Notificações</strong> do paciente: listagem de alertas recebidos e opção de se inscrever/cancelar alerta de um medicamento</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Melhorar a tela de <strong>Histórico</strong> com filtro por data e por UBS; adicionar paginação para históricos longos; ajustar layout para mobile</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Implementar <strong>tratamento global de erros</strong> no FastAPI com handlers customizados (404, 422, 500); padronizar o formato de resposta de erro em toda a API</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Escrever os primeiros <strong>testes automatizados</strong> com pytest: testes das rotas de autenticação e de UBSs (casos de sucesso e de erro)</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Escrever testes automatizados para as rotas de <strong>medicamentos e notificações</strong>; configurar o banco de dados de teste (SQLite em memória) para os testes</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Analisar e otimizar as <strong>queries mais lentas</strong> identificadas nos testes; adicionar índices compostos onde necessário; verificar o plano de execução com <code>EXPLAIN ANALYZE</code></div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Criar seeds com volume maior de dados (100+ medicamentos, 20+ UBSs, 200+ retiradas) para simular carga real; testar performance das queries com esse volume</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 7 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num blue">🔧 Evolução</span>
+      <h2>Semana 7 — Segurança, Testes e Staging</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label evolve">Semana 7</span>
+        <span class="week-title">🔒 Revisão de segurança, cobertura de testes e ambiente de staging</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Revisar o armazenamento do token JWT no frontend (usar <code>httpOnly cookie</code> ou avaliar riscos do <code>localStorage</code>); implementar <strong>refresh automático de sessão</strong> expirada</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Realizar testes manuais de usabilidade em todas as telas no mobile e desktop; documentar bugs visuais encontrados e corrigi-los</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Adicionar <strong>acessibilidade básica</strong> nas telas: atributos <code>aria-label</code>, contraste de cores adequado e navegação por teclado nos formulários</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Revisar a segurança da API: validar que todas as rotas privadas exigem token JWT; implementar <strong>rate limiting</strong> básico para evitar abuso nas rotas de login</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Ampliar a cobertura de testes: adicionar casos de teste de <strong>autorização</strong> (acesso negado sem token, token expirado); atingir mínimo de 60% de cobertura geral</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Revisar todas as rotas contra <strong>SQL Injection</strong> (garantir uso de ORM sem queries cruas); validar que nenhum dado sensível é exposto desnecessariamente nas respostas</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Revisar permissões do usuário do banco no PostgreSQL (princípio do menor privilégio); documentar o schema final do banco com descrição de cada tabela e coluna</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Configurar o <strong>ambiente de staging</strong> localmente com Docker Compose usando variáveis de ambiente separadas do dev; simular um deploy completo do zero</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 8 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num blue">🔧 Evolução</span>
+      <h2>Semana 8 — Validação Final da Fase 2</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label evolve">Semana 8</span>
+        <span class="week-title">🎯 Ajustes finais, validação em staging e aprovação para deploy</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Gerar o <strong>build de produção</strong> do React (<code>npm run build</code>) e validar que funciona corretamente; ajustar variáveis de ambiente para apontar para a API do staging</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Realizar testes de regressão visual: percorrer todas as telas e confirmar que nenhuma mudança quebrou o layout; documentar o resultado dos testes</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Testar o fluxo completo do ponto de vista do usuário no staging: cadastro → login → busca → notificação → histórico; documentar qualquer problema encontrado</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Revisar e ajustar o <code>main.py</code> para configurações de produção (desativar modo debug, configurar logs); atualizar a documentação automática do FastAPI (<code>/docs</code>)</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Rodar a suíte de testes completa no ambiente de staging; garantir que todos passam; corrigir qualquer falha identificada antes da aprovação para Fase 3</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Fazer testes manuais de todas as rotas no staging via Insomnia; validar paginação, filtros e respostas de erro; atualizar a documentação das rotas</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Executar as migrations no banco do staging do zero; confirmar que todos os dados de seed são carregados corretamente; testar integridade dos dados com queries manuais</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Validar que o Docker Compose do staging sobe todos os serviços sem erros; testar restart automático dos containers em caso de falha (<code>restart: always</code>)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">✅</span>
+      <p><strong>Marco da Fase 2:</strong> ao final da Semana 8 o sistema deve estar completo e validado em staging — testes passando, segurança revisada e aprovação da equipe para iniciar o deploy em produção!</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════ FASE 3 — DEPLOY ═══════════════ -->
+  <div class="section-divider"><span class="section-divider-badge orange">🚀 Fase 3 — Deploy</span></div>
+
+  <!-- SEMANA 9 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num orange">🚀 Deploy</span>
+      <h2>Semana 9 — Configuração da VPS</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label deploy">Semana 9</span>
+        <span class="week-title">🖥️ VPS Hostinger pronta para receber a aplicação</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend · Infraestrutura</div>
+            <div class="task-desc">Criar o <code>Dockerfile</code> do frontend: build do React + Nginx para servir os arquivos estáticos; testar a imagem localmente com <code>docker build</code> e <code>docker run</code></div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Revisar e ajustar todas as chamadas de API no frontend para usar variáveis de ambiente (<code>VITE_API_URL</code>); garantir que nenhuma URL está hardcoded no código</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Testar o build de produção do frontend na imagem Docker localmente; validar que todas as rotas do React Router funcionam corretamente servidas pelo Nginx</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Criar o <code>Dockerfile</code> do backend FastAPI com Uvicorn em modo produção; testar a imagem localmente; garantir que lê todas as configurações via variáveis de ambiente</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Testar o container do backend em conjunto com o container do banco de dados via Docker Compose; confirmar que as migrations rodam automaticamente na inicialização</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Preparar o script de <strong>health check</strong> do backend (<code>/health</code>); validar que o Docker reinicia o container automaticamente em caso de falha</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Configurar o container do PostgreSQL no Docker Compose com <strong>volume persistente</strong> mapeado no host; testar que os dados sobrevivem a um restart do container</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Contratar e configurar a <strong>VPS Hostinger</strong>: acessar via SSH, instalar Docker e Docker Compose, criar usuário de deploy e configurar firewall (portas 80, 443 e 22)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 10 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num orange">🚀 Deploy</span>
+      <h2>Semana 10 — Deploy na VPS e HTTPS</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label deploy">Semana 10</span>
+        <span class="week-title">🌐 Aplicação no ar com HTTPS configurado</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend · Infraestrutura</div>
+            <div class="task-desc">Fazer o upload do <code>docker-compose.yml</code> de produção para a VPS via SSH; subir todos os containers com <code>docker compose up -d</code> e validar que estão rodando</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Testar o frontend em produção: percorrer todas as telas, verificar que as chamadas de API chegam ao backend correto e que não há erros no console do navegador</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Testar o fluxo completo do usuário em produção (mobile e desktop); registrar e reportar qualquer bug encontrado para correção imediata</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Verificar os logs do backend em produção (<code>docker compose logs -f backend</code>); garantir que as migrations rodaram e a API está respondendo corretamente na VPS</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Testar todas as rotas da API em produção via Insomnia apontando para a URL da VPS; confirmar que autenticação, busca e histórico estão funcionando</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Monitorar os logs de erro do backend durante os testes de produção; corrigir bugs críticos encontrados; verificar o endpoint <code>/health</code> respondendo corretamente</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Verificar que as migrations rodaram corretamente no banco de produção; rodar os seeds básicos de dados iniciais; confirmar integridade com queries no banco da VPS</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Configurar o <strong>HTTPS</strong> com Certbot + Let's Encrypt no Nginx da VPS; apontar o domínio para o IP da VPS; verificar que o certificado SSL está ativo e renovação automática configurada</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 11 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num orange">🚀 Deploy</span>
+      <h2>Semana 11 — Estabilização e Backups</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label deploy">Semana 11</span>
+        <span class="week-title">🛡️ Sistema estável, backups e monitoramento</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend · Infraestrutura</div>
+            <div class="task-desc">Criar um <strong>script de deploy</strong> em shell (<code>deploy.sh</code>) que faz pull das últimas imagens e reinicia os containers — facilita atualizações futuras sem precisar lembrar os comandos</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Realizar testes de carga básicos no frontend: acessar o site simultaneamente em diferentes dispositivos; verificar tempo de carregamento e estabilidade</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend</div>
+            <div class="task-desc">Fazer uma revisão final de acessibilidade e responsividade em produção; corrigir qualquer problema visual restante; validar o comportamento offline (sem internet)</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Configurar <strong>logs estruturados</strong> no backend com nível de log configurável por variável de ambiente; garantir que erros críticos ficam registrados para diagnóstico</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Rodar a suíte de testes completa uma última vez apontando para o ambiente de produção; documentar a cobertura final de testes no README do backend</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend</div>
+            <div class="task-desc">Testar cenários de falha: o que acontece se o banco cair? Se o backend reiniciar? Documentar o comportamento e garantir que os containers se recuperam automaticamente</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados</div>
+            <div class="task-desc">Configurar <strong>backup automático</strong> do PostgreSQL com script cron na VPS (<code>pg_dump</code> diário); testar a restauração do backup em ambiente isolado</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Banco de Dados · Infraestrutura</div>
+            <div class="task-desc">Configurar monitoramento de uptime (ex.: UptimeRobot gratuito) para alertar a equipe se o site cair; configurar alertas de uso de disco e memória na VPS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMANA 12 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="step-num green">🎉 Entrega</span>
+      <h2>Semana 12 — Documentação Final e Apresentação</h2>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-label deploy">Semana 12</span>
+        <span class="week-title">🏆 Documentação, ensaio e apresentação final</span>
+      </div>
+      <div class="week-body">
+        <div class="task-row">
+          <div class="task-avatar av-bruno">BP</div>
+          <div class="task-info">
+            <div class="task-name nm-bruno">Bruno Pereira</div>
+            <div class="task-squad">Frontend · Apresentação</div>
+            <div class="task-desc">Preparar a demonstração ao vivo do sistema para a apresentação; ensaiar a navegação pelas telas com fluência; garantir que o ambiente de produção está estável no dia</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-vitor">VH</div>
+          <div class="task-info">
+            <div class="task-name nm-vitor">Vitor Hugo</div>
+            <div class="task-squad">Frontend · Substituto na Apresentação</div>
+            <div class="task-desc">Documentar os componentes React criados no projeto (props, uso, exemplos); preparar-se como substituto de Kaleb para a abertura caso necessário</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-amy">AR</div>
+          <div class="task-info">
+            <div class="task-name nm-amy">Amy Ribeiro</div>
+            <div class="task-squad">Frontend · Fotógrafo / Registro</div>
+            <div class="task-desc">Documentar as telas finais do sistema (prints organizados); no dia da apresentação, realizar o registro fotográfico da equipe e da banca</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-igor">IA</div>
+          <div class="task-info">
+            <div class="task-name nm-igor">Igor Alves</div>
+            <div class="task-squad">Backend · Controle do Checklist</div>
+            <div class="task-desc">Finalizar a documentação da API no README do backend; no dia da apresentação, controlar o checklist de pontos a serem cobertos e sinalizar para a equipe</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-julio">JO</div>
+          <div class="task-info">
+            <div class="task-name nm-julio">Julio Oliveira</div>
+            <div class="task-squad">Backend · Suporte Técnico</div>
+            <div class="task-desc">Documentar os testes automatizados e a cobertura final; no dia da apresentação, atuar como suporte técnico resolvendo qualquer imprevisto de ambiente</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-gabriel">GV</div>
+          <div class="task-info">
+            <div class="task-name nm-gabriel">Gabriel Vieira</div>
+            <div class="task-squad">Backend · Substituto Suporte Técnico</div>
+            <div class="task-desc">Documentar as rotas implementadas por ele; preparar-se como substituto de Julio no suporte técnico da apresentação caso necessário</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-kaleb">KD</div>
+          <div class="task-info">
+            <div class="task-name nm-kaleb">Kaleb Domingos</div>
+            <div class="task-squad">Banco de Dados · Abertura e Encerramento</div>
+            <div class="task-desc">Documentar o schema final do banco e o processo de backup; no dia da apresentação, realizar a abertura apresentando a equipe e o projeto, e o encerramento com considerações finais</div>
+          </div>
+        </div>
+        <div class="task-row">
+          <div class="task-avatar av-alessandra">AF</div>
+          <div class="task-info">
+            <div class="task-name nm-alessandra">Alessandra Freitas</div>
+            <div class="task-squad">Infraestrutura · Substituta Apresentação das Telas</div>
+            <div class="task-desc">Documentar o processo de configuração da VPS e deploy Docker; preparar-se como substituta de Bruno na apresentação das telas ao vivo caso necessário</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">🚀</span>
+      <p><strong>UBSFacil entregue!</strong> 12 semanas de trabalho em equipe transformadas em um sistema real que vai ajudar pacientes de verdade. Parabéns, equipe! 🏥💚</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Cronograma de Tarefas — UBSFacil · 12 Semanas · 8 Pessoas · 3 Fases · 2026
+</footer>
+
+</body>
+</html>
