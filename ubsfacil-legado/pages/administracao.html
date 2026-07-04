@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel ADM — UBS Fácil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Variáveis CSS (idênticas ao projeto) ── */
+    :root {
+      --blue-main:   #1565c0;
+      --blue-dark:   #0d47a1;
+      --blue-light:  #e8f0fe;
+      --green-accent:#69f0ae;
+      --teal:        #26a69a;
+      --bg:          #f4f6fb;
+      --dark:        #1a2a4a;
+      --deep-dark:   #0d2251;
+      --white:       #ffffff;
+      --border:      rgba(0,0,0,.08);
+      --shadow-sm:   0 2px 8px rgba(21,101,192,.10);
+      --shadow-md:   0 4px 20px rgba(21,101,192,.16);
+      --radius:      14px;
+      --transition:  .25s cubic-bezier(.4,0,.2,1);
+      --sidebar-w:   240px;
+
+      /* badge colors */
+      --badge-ubs:   #1565c0;
+      --badge-upa:   #e65100;
+      --badge-hosp:  #b71c1c;
+      --badge-posto: #2e7d32;
+      --badge-farm:  #6a1b9a;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ══════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--deep-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      z-index: 100;
+      transition: transform var(--transition);
+    }
+    .sidebar-logo {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-logo .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--blue-main);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .sidebar-logo .logo-text {
+      display: flex; flex-direction: column;
+    }
+    .sidebar-logo .logo-title {
+      font-size: 15px; font-weight: 800;
+      color: var(--white); letter-spacing: -.2px;
+    }
+    .sidebar-logo .logo-sub {
+      font-size: 10px; font-weight: 600;
+      color: var(--teal); letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-section {
+      padding: 16px 12px 6px;
+      font-size: 10px; font-weight: 700;
+      color: rgba(255,255,255,.35);
+      text-transform: uppercase; letter-spacing: .8px;
+    }
+    .sidebar-nav { flex: 1; padding: 4px 0; overflow-y: auto; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px;
+      color: rgba(255,255,255,.6);
+      font-size: 13.5px; font-weight: 600;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background var(--transition), color var(--transition);
+      position: relative;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.06); color: var(--white); }
+    .nav-item.active {
+      background: rgba(21,101,192,.35);
+      color: var(--white);
+    }
+    .nav-item.active::before {
+      content: '';
+      position: absolute; left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 3px; height: 60%;
+      background: var(--green-accent);
+      border-radius: 0 4px 4px 0;
+    }
+    .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--blue-main);
+      color: var(--white);
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .admin-avatar {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .avatar-circle {
+      width: 34px; height: 34px;
+      background: var(--blue-main);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .avatar-info { flex: 1; overflow: hidden; }
+    .avatar-name { font-size: 12.5px; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .avatar-role { font-size: 10px; font-weight: 600; color: rgba(255,255,255,.4); }
+    .btn-logout {
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,.35); font-size: 14px;
+      transition: color var(--transition);
+      padding: 4px;
+    }
+    .btn-logout:hover { color: #ef5350; }
+
+    /* ══════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════ */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Top Bar */
+    .topbar {
+      height: 60px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
+    .topbar-title { font-size: 16px; font-weight: 800; color: var(--deep-dark); }
+    .topbar-breadcrumb { font-size: 12px; font-weight: 600; color: rgba(26,42,74,.4); }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .btn-topbar {
+      background: none; border: none; cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; color: rgba(26,42,74,.5);
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-topbar:hover { background: var(--blue-light); color: var(--blue-main); }
+    .btn-back-home {
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: 1.5px solid rgba(26,42,74,.15);
+      cursor: pointer; padding: 7px 14px; border-radius: 10px;
+      font-size: 13px; font-weight: 700; color: var(--deep-dark);
+      text-decoration: none; font-family: 'Nunito', sans-serif;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .btn-back-home:hover { background: var(--blue-main); color: var(--white); border-color: var(--blue-main); }
+    .notif-dot {
+      position: relative;
+    }
+    .notif-dot::after {
+      content: '';
+      position: absolute; top: 6px; right: 6px;
+      width: 7px; height: 7px;
+      background: #ef5350;
+      border-radius: 50%;
+      border: 1.5px solid var(--white);
+    }
+
+    /* Content Area */
+    .content { padding: 28px; flex: 1; }
+
+    /* ══════════════════════════════════
+       PAGES (mostrar/ocultar via JS)
+    ══════════════════════════════════ */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ══════════════════════════════════
+       DASHBOARD — KPI CARDS
+    ══════════════════════════════════ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--white);
+      border: 0.5px solid #e0e5ef;
+      border-radius: var(--radius);
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .kpi-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .kpi-body { flex: 1; }
+    .kpi-label { font-size: 12px; font-weight: 700; color: rgba(26,42,74,.5); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+    .kpi-value { font-size: 28px; font-weight: 900; color: var(--deep-dark); line-height: 1; }
+    .kpi-delta { font-size: 11px; font-weight: 700; margin-top: 4px; }
+    .kpi-delta.up   { color: #2e7d32; }
+    .kpi-delta.down { color: #b71c1c; }
+
+    /* Dashboard grid */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+    }
+    @media (max-width: 1100px) { .dash-grid { grid-template-columns: 1fr; } }
+
+    /* Chart placeholder */
+    .chart-card {
+      background: var(--white);
+      border: 0.5px solid #e0e5ef;
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .card-title { font-size: 14px; font-weight: 800; color: var(--deep-dark); }
+    .card-sub   { font-size: 12px; font-weight: 600; color: rgba(26,42,74,.4); margin-top: 1px; }
+
+    /* Mini bar chart */
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: var(--blue-light);
+      position: relative;
+      transition: background var(--transition);
+      cursor: pointer;
+    }
+    .bar:hover { background: var(--blue-main); }
+    .bar.highlight { background: var(--blue-main); }
+    .bar-label { font-size: 10px; font-weight: 700; color: rgba(26,42,74,.4); }
+
+    /* Recent activity */
+    .activity-card {
+      background: var(--white);
+      border: 0.5px solid #e0e5ef;
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .activity-list { display: flex; flex-direction: column; gap: 14px; }
+    .activity-item { display: flex; align-items: center; gap: 12px; }
+    .act-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%; flex-shrink: 0;
+    }
+    .act-text { font-size: 12.5px; font-weight: 600; color: var(--dark); flex: 1; }
+    .act-time { font-size: 11px; font-weight: 600; color: rgba(26,42,74,.4); white-space: nowrap; }
+
+    /* ══════════════════════════════════
+       TABLE SHARED
+    ══════════════════════════════════ */
+    .table-card {
+      background: var(--white);
+      border: 0.5px solid #e0e5ef;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .table-toolbar {
+      padding: 18px 22px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-box {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg);
+      border: 1px solid #e0e5ef;
+      border-radius: 10px;
+      padding: 8px 14px;
+      flex: 1; min-width: 200px; max-width: 320px;
+    }
+    .search-box input {
+      background: none; border: none; outline: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: var(--dark); width: 100%;
+    }
+    .search-box input::placeholder { color: rgba(26,42,74,.35); }
+    .search-icon { font-size: 15px; color: rgba(26,42,74,.35); }
+
+    .filter-select {
+      background: var(--bg);
+      border: 1px solid #e0e5ef;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12.5px; font-weight: 600;
+      color: var(--dark); cursor: pointer; outline: none;
+    }
+
+    .btn-primary {
+      background: var(--blue-main);
+      color: var(--white);
+      border: none; border-radius: 10px;
+      padding: 9px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      margin-left: auto;
+    }
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(21,101,192,.3);
+    }
+
+    table {
+      width: 100%; border-collapse: collapse;
+    }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px; font-weight: 700;
+      color: rgba(26,42,74,.45);
+      text-transform: uppercase; letter-spacing: .6px;
+      background: #fafbff;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr {
+      border-bottom: 1px solid #f0f2f8;
+      transition: background var(--transition);
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafbff; }
+    tbody td {
+      padding: 13px 16px;
+      font-size: 13px; font-weight: 600;
+      color: var(--dark);
+      vertical-align: middle;
+    }
+
+    /* badges */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+    }
+    .badge-ubs   { background: #e8f0fe; color: var(--badge-ubs); }
+    .badge-upa   { background: #fff3e0; color: var(--badge-upa); }
+    .badge-hosp  { background: #ffebee; color: var(--badge-hosp); }
+    .badge-posto { background: #e8f5e9; color: var(--badge-posto); }
+    .badge-farm  { background: #f3e5f5; color: var(--badge-farm); }
+    .badge-green { background: #e8f5e9; color: #2e7d32; }
+    .badge-red   { background: #ffebee; color: #b71c1c; }
+    .badge-yellow{ background: #fffde7; color: #f57f17; }
+    .badge-gray  { background: #f5f5f5; color: #546e7a; }
+    .badge-blue  { background: var(--blue-light); color: var(--blue-main); }
+    .badge-teal  { background: #e0f2f1; color: var(--teal); }
+
+    /* row actions */
+    .row-actions { display: flex; gap: 6px; align-items: center; }
+    .btn-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px; border: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-icon.edit  { background: var(--blue-light); color: var(--blue-main); }
+    .btn-icon.edit:hover  { background: var(--blue-main); color: var(--white); }
+    .btn-icon.del   { background: #ffebee; color: #ef5350; }
+    .btn-icon.del:hover   { background: #ef5350; color: var(--white); }
+    .btn-icon.view  { background: #e0f2f1; color: var(--teal); }
+    .btn-icon.view:hover  { background: var(--teal); color: var(--white); }
+
+    /* pagination */
+    .pagination {
+      display: flex; align-items: center; gap: 6px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+      justify-content: flex-end;
+    }
+    .page-info { font-size: 12px; font-weight: 600; color: rgba(26,42,74,.45); margin-right: auto; }
+    .btn-page {
+      width: 32px; height: 32px;
+      border-radius: 8px; border: 1px solid #e0e5ef;
+      background: var(--white); cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12.5px; font-weight: 700; color: var(--dark);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .btn-page:hover, .btn-page.active {
+      background: var(--blue-main); color: var(--white); border-color: var(--blue-main);
+    }
+
+    /* ══════════════════════════════════
+       MODAL
+    ══════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(13,34,81,.45);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%; max-width: 520px;
+      box-shadow: 0 20px 60px rgba(13,34,81,.25);
+      animation: modalIn .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes modalIn {
+      from { transform: scale(.93); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .modal-title { font-size: 17px; font-weight: 800; color: var(--deep-dark); }
+    .btn-close {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: var(--bg); cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(26,42,74,.5);
+      transition: background var(--transition);
+    }
+    .btn-close:hover { background: #ffebee; color: #ef5350; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1/-1; }
+    .form-label { font-size: 12px; font-weight: 700; color: rgba(26,42,74,.6); }
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg);
+      border: 1px solid #e0e5ef;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: var(--dark); outline: none;
+      transition: border-color var(--transition);
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--blue-main);
+      box-shadow: 0 0 0 3px rgba(21,101,192,.12);
+    }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .modal-footer {
+      display: flex; gap: 10px; justify-content: flex-end;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-secondary {
+      background: var(--bg); border: 1px solid #e0e5ef;
+      color: var(--dark); border-radius: 10px;
+      padding: 9px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-secondary:hover { background: #e0e5ef; }
+
+    /* ══════════════════════════════════
+       TOAST
+    ══════════════════════════════════ */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 300; display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast {
+      background: var(--deep-dark);
+      color: var(--white);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px; font-weight: 700;
+      box-shadow: 0 6px 24px rgba(13,34,81,.3);
+      display: flex; align-items: center; gap: 10px;
+      animation: toastIn .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes toastIn {
+      from { transform: translateX(40px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+    .toast.success .toast-icon { color: var(--green-accent); }
+    .toast.error   .toast-icon { color: #ef5350; }
+
+    /* ══════════════════════════════════
+       STAT HIGHLIGHT (Usuarios page)
+    ══════════════════════════════════ */
+    .section-title {
+      font-size: 18px; font-weight: 800;
+      color: var(--deep-dark); margin-bottom: 18px;
+    }
+
+    /* mobile toggle */
+    .sidebar-toggle {
+      display: none;
+      position: fixed; top: 14px; left: 14px;
+      z-index: 150;
+      background: var(--blue-main); color: var(--white);
+      border: none; border-radius: 10px;
+      width: 38px; height: 38px;
+      font-size: 18px; cursor: pointer;
+      align-items: center; justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .topbar { padding: 0 16px 0 60px; }
+      .sidebar-toggle { display: flex; }
+      .content { padding: 16px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .dash-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .btn-back-home .back-home-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-logo" href="../index.html" style="text-decoration:none;">
+    <div class="logo-icon">🏥</div>
+    <div class="logo-text">
+      <span class="logo-title">UBS Fácil</span>
+      <span class="logo-sub">Painel ADM</span>
+    </div>
+  </a>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Geral</div>
+    <a class="nav-item active" onclick="showPage('dashboard', this)">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+
+    <div class="sidebar-section">Gestão</div>
+    <a class="nav-item" onclick="showPage('unidades', this)">
+      <span class="nav-icon">🏥</span> Unidades
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" onclick="showPage('medicamentos', this)">
+      <span class="nav-icon">💊</span> Medicamentos
+    </a>
+    <a class="nav-item" onclick="showPage('usuarios', this)">
+      <span class="nav-icon">👥</span> Usuários
+    </a>
+
+    <div class="sidebar-section">Sistema</div>
+    <a class="nav-item" onclick="showPage('configuracoes', this)">
+      <span class="nav-icon">⚙️</span> Configurações
+    </a>
+    <a class="nav-item" onclick="showPage('logs', this)">
+      <span class="nav-icon">📋</span> Logs do Sistema
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-avatar">
+      <div class="avatar-circle">AD</div>
+      <div class="avatar-info">
+        <div class="avatar-name">Admin Gestor</div>
+        <div class="avatar-role">Administrador</div>
+      </div>
+      <button class="btn-logout" title="Sair" onclick="showToast('Sessão encerrada.', 'error')">🚪</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <span class="topbar-breadcrumb" id="topbar-breadcrumb">/ Visão geral</span>
+    </div>
+    <div class="topbar-right">
+      <a class="btn-back-home" href="../index.html" title="Voltar ao site">
+        <span>←</span> <span class="back-home-label">Voltar ao início</span>
+      </a>
+      <button class="btn-topbar notif-dot" title="Notificações">🔔</button>
+      <button class="btn-topbar" title="Ajuda">❓</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════════════
+         PAGE: DASHBOARD
+    ════════════════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#e8f0fe">🏥</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Unidades Ativas</div>
+            <div class="kpi-value">1.248</div>
+            <div class="kpi-delta up">▲ 12 novas este mês</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#e8f5e9">💊</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Medicamentos</div>
+            <div class="kpi-value">342</div>
+            <div class="kpi-delta up">▲ 8 adicionados</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#f3e5f5">👥</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Usuários Cadastrados</div>
+            <div class="kpi-value">47.892</div>
+            <div class="kpi-delta up">▲ +3,2% esta semana</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#fff3e0">⚠️</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Alertas Pendentes</div>
+            <div class="kpi-value">7</div>
+            <div class="kpi-delta down">▼ 2 novos hoje</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="chart-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Buscas por Medicamentos</div>
+              <div class="card-sub">Últimos 7 dias</div>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-wrap"><div class="bar" style="height:55%"></div><span class="bar-label">Seg</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:72%"></div><span class="bar-label">Ter</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:48%"></div><span class="bar-label">Qua</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:88%"></div><span class="bar-label">Qui</span></div>
+            <div class="bar-wrap"><div class="bar highlight" style="height:95%"></div><span class="bar-label">Sex</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:62%"></div><span class="bar-label">Sáb</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:40%"></div><span class="bar-label">Dom</span></div>
+          </div>
+        </div>
+
+        <div class="activity-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Atividade Recente</div>
+              <div class="card-sub">Últimas atualizações</div>
+            </div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="act-dot" style="background:#69f0ae"></div>
+              <div class="act-text">UBS Vila Madalena cadastrou estoque de Amoxicilina</div>
+              <div class="act-time">2 min</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#1565c0"></div>
+              <div class="act-text">Novo usuário registrado via Gov.br</div>
+              <div class="act-time">8 min</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#f57f17"></div>
+              <div class="act-text">UPA Jabaquara reportou falta de Dipirona</div>
+              <div class="act-time">15 min</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#69f0ae"></div>
+              <div class="act-text">Hospital das Clínicas atualizou horários</div>
+              <div class="act-time">32 min</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#ef5350"></div>
+              <div class="act-text">Alerta: estoque crítico de Insulina na UBS Lapa</div>
+              <div class="act-time">1h</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#1565c0"></div>
+              <div class="act-text">3 novas unidades aprovadas pelo gestor</div>
+              <div class="act-time">2h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════
+         PAGE: UNIDADES
+    ════════════════════ -->
+    <div class="page" id="page-unidades">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar unidade..." oninput="filterTable('tbl-unidades', this.value)" />
+          </div>
+          <select class="filter-select" onchange="filterTableBySelect('tbl-unidades', this.value, 2)">
+            <option value="">Todos os tipos</option>
+            <option value="UBS">UBS</option>
+            <option value="UPA">UPA</option>
+            <option value="Hospital">Hospital</option>
+            <option value="Posto">Posto de Saúde</option>
+            <option value="Farmácia">Farmácia Popular</option>
+          </select>
+          <select class="filter-select" onchange="filterTableBySelect('tbl-unidades', this.value, 3)">
+            <option value="">Todos os status</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Pendente">Pendente</option>
+          </select>
+          <button class="btn-primary" onclick="openModal('modal-unidade')">＋ Nova Unidade</button>
+        </div>
+        <table id="tbl-unidades">
+          <thead>
+            <tr>
+              <th>Unidade</th>
+              <th>Endereço</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Avaliação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>UBS Vila Madalena</strong></td>
+              <td>R. Harmonia, 150 — SP</td>
+              <td><span class="badge badge-ubs">UBS</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>⭐ 4.3</td>
+              <td class="row-actions">
+                <button class="btn-icon view" title="Visualizar">👁</button>
+                <button class="btn-icon edit" title="Editar" onclick="openModal('modal-unidade')">✏️</button>
+                <button class="btn-icon del"  title="Remover" onclick="showToast('Unidade removida.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>UPA Jabaquara</strong></td>
+              <td>Av. Jabaquara, 820 — SP</td>
+              <td><span class="badge badge-upa">UPA</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>⭐ 3.8</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-unidade')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Unidade removida.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Hospital das Clínicas</strong></td>
+              <td>Av. Dr. Enéas, 255 — SP</td>
+              <td><span class="badge badge-hosp">Hospital</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>⭐ 4.7</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-unidade')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Unidade removida.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Posto de Saúde Lapa</strong></td>
+              <td>R. Catão, 200 — SP</td>
+              <td><span class="badge badge-posto">Posto</span></td>
+              <td><span class="badge badge-yellow">Pendente</span></td>
+              <td>⭐ 4.0</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-unidade')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Unidade removida.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Farmácia Popular Brás</strong></td>
+              <td>Av. Rangel Pestana, 300 — SP</td>
+              <td><span class="badge badge-farm">Farmácia</span></td>
+              <td><span class="badge badge-red">Inativo</span></td>
+              <td>—</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-unidade')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Unidade removida.', 'error')">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span class="page-info">Mostrando 5 de 1.248 resultados</span>
+          <button class="btn-page active">1</button>
+          <button class="btn-page">2</button>
+          <button class="btn-page">3</button>
+          <button class="btn-page">…</button>
+          <button class="btn-page">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════
+         PAGE: MEDICAMENTOS
+    ════════════════════ -->
+    <div class="page" id="page-medicamentos">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar medicamento..." oninput="filterTable('tbl-meds', this.value)" />
+          </div>
+          <select class="filter-select">
+            <option value="">Todas as categorias</option>
+            <option>Analgésico</option>
+            <option>Antibiótico</option>
+            <option>Diabetes</option>
+            <option>Hipertensão</option>
+            <option>Colesterol</option>
+            <option>Gastro</option>
+            <option>Respiratório</option>
+          </select>
+          <select class="filter-select">
+            <option value="">Disponibilidade</option>
+            <option>Disponível</option>
+            <option>Indisponível</option>
+            <option>Estoque Crítico</option>
+          </select>
+          <button class="btn-primary" onclick="openModal('modal-med')">＋ Novo Medicamento</button>
+        </div>
+        <table id="tbl-meds">
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>Categoria</th>
+              <th>Tarja</th>
+              <th>Unidades c/ Estoque</th>
+              <th>Disponibilidade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Amoxicilina 500mg</strong></td>
+              <td><span class="badge badge-blue">Antibiótico</span></td>
+              <td><span class="badge badge-yellow">Vermelha</span></td>
+              <td>82</td>
+              <td><span class="badge badge-green">Disponível</span></td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-med')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Medicamento removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Dipirona Sódica 500mg</strong></td>
+              <td><span class="badge badge-teal">Analgésico</span></td>
+              <td><span class="badge badge-gray">Isento</span></td>
+              <td>156</td>
+              <td><span class="badge badge-green">Disponível</span></td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-med')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Medicamento removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Insulina NPH 100UI/mL</strong></td>
+              <td><span class="badge badge-blue">Diabetes</span></td>
+              <td><span class="badge badge-red">Preta</span></td>
+              <td>14</td>
+              <td><span class="badge badge-yellow">Estoque Crítico</span></td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-med')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Medicamento removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Losartana 50mg</strong></td>
+              <td><span class="badge badge-blue">Hipertensão</span></td>
+              <td><span class="badge badge-gray">Isento</span></td>
+              <td>0</td>
+              <td><span class="badge badge-red">Indisponível</span></td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-med')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Medicamento removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Omeprazol 20mg</strong></td>
+              <td><span class="badge badge-teal">Gastro</span></td>
+              <td><span class="badge badge-gray">Isento</span></td>
+              <td>98</td>
+              <td><span class="badge badge-green">Disponível</span></td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-med')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Medicamento removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Atorvastatina 20mg</strong></td>
+              <td><span class="badge badge-blue">Colesterol</span></td>
+              <td><span class="badge badge-gray">Isento</span></td>
+              <td>71</td>
+              <td><span class="badge badge-green">Disponível</span></td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-med')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Medicamento removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span class="page-info">Mostrando 6 de 342 resultados</span>
+          <button class="btn-page active">1</button>
+          <button class="btn-page">2</button>
+          <button class="btn-page">3</button>
+          <button class="btn-page">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════
+         PAGE: USUÁRIOS
+    ════════════════════ -->
+    <div class="page" id="page-usuarios">
+      <div class="kpi-grid" style="margin-bottom:22px">
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#e8f0fe">👤</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total de Usuários</div>
+            <div class="kpi-value">47.892</div>
+            <div class="kpi-delta up">▲ +312 esta semana</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#e8f5e9">✅</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Verificados Gov.br</div>
+            <div class="kpi-value">41.207</div>
+            <div class="kpi-delta up">86% do total</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#fff3e0">🏥</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Gestores de UBS</div>
+            <div class="kpi-value">1.248</div>
+            <div class="kpi-delta up">▲ 12 novos</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background:#ffebee">🚫</div>
+          <div class="kpi-body">
+            <div class="kpi-label">Contas Bloqueadas</div>
+            <div class="kpi-value">23</div>
+            <div class="kpi-delta down">▼ em análise</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar usuário..." oninput="filterTable('tbl-users', this.value)" />
+          </div>
+          <select class="filter-select">
+            <option value="">Todos os perfis</option>
+            <option>Cidadão</option>
+            <option>Gestor UBS</option>
+            <option>Administrador</option>
+          </select>
+          <select class="filter-select">
+            <option value="">Todos os status</option>
+            <option>Ativo</option>
+            <option>Inativo</option>
+            <option>Bloqueado</option>
+          </select>
+          <button class="btn-primary" onclick="openModal('modal-user')">＋ Novo Usuário</button>
+        </div>
+        <table id="tbl-users">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>E-mail</th>
+              <th>Perfil</th>
+              <th>Gov.br</th>
+              <th>Status</th>
+              <th>Cadastro</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Maria Silva</strong></td>
+              <td>maria.silva@email.com</td>
+              <td><span class="badge badge-blue">Cidadão</span></td>
+              <td><span class="badge badge-green">✓ Verificado</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>12/05/2025</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-user')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Usuário removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>João Mendes</strong></td>
+              <td>j.mendes@ubs.sp.gov.br</td>
+              <td><span class="badge badge-teal">Gestor UBS</span></td>
+              <td><span class="badge badge-green">✓ Verificado</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>03/02/2025</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-user')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Usuário removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Ana Rocha</strong></td>
+              <td>ana.rocha@email.com</td>
+              <td><span class="badge badge-blue">Cidadão</span></td>
+              <td><span class="badge badge-yellow">Pendente</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>18/05/2025</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-user')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Usuário removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Carlos Lima</strong></td>
+              <td>carlos.lima@email.com</td>
+              <td><span class="badge badge-blue">Cidadão</span></td>
+              <td><span class="badge badge-red">Não verificado</span></td>
+              <td><span class="badge badge-red">Bloqueado</span></td>
+              <td>07/01/2025</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-user')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Usuário removido.', 'error')">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Admin Gestor</strong></td>
+              <td>admin@ubsfacil.gov.br</td>
+              <td><span class="badge badge-farm">Administrador</span></td>
+              <td><span class="badge badge-green">✓ Verificado</span></td>
+              <td><span class="badge badge-green">Ativo</span></td>
+              <td>01/01/2025</td>
+              <td class="row-actions">
+                <button class="btn-icon view">👁</button>
+                <button class="btn-icon edit" onclick="openModal('modal-user')">✏️</button>
+                <button class="btn-icon del" onclick="showToast('Ação não permitida.', 'error')">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span class="page-info">Mostrando 5 de 47.892 resultados</span>
+          <button class="btn-page active">1</button>
+          <button class="btn-page">2</button>
+          <button class="btn-page">3</button>
+          <button class="btn-page">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════
+         PAGE: CONFIGURAÇÕES
+    ════════════════════ -->
+    <div class="page" id="page-configuracoes">
+      <div style="max-width:600px; display:flex; flex-direction:column; gap:18px;">
+        <div class="table-card" style="padding:24px">
+          <div class="card-title" style="margin-bottom:18px">Informações do Sistema</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Nome da Plataforma</label>
+              <input class="form-input" value="UBS Fácil" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">E-mail de Suporte</label>
+              <input class="form-input" value="suporte@ubsfacil.gov.br" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Central SUS</label>
+              <input class="form-input" value="0800 61 1997" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Chave Google Maps API</label>
+              <input class="form-input" value="AIzaSyAvZgvllWYU15bt..." type="password" />
+            </div>
+          </div>
+          <div style="margin-top:18px">
+            <button class="btn-primary" style="margin-left:0" onclick="showToast('Configurações salvas!', 'success')">💾 Salvar Alterações</button>
+          </div>
+        </div>
+
+        <div class="table-card" style="padding:24px">
+          <div class="card-title" style="margin-bottom:18px">Segurança e LGPD</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Autenticação</label>
+              <select class="form-select"><option>Gov.br (obrigatório)</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expiração de sessão</label>
+              <select class="form-select"><option>30 minutos</option><option>1 hora</option><option>8 horas</option></select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Política de dados</label>
+              <select class="form-select"><option>Conformidade LGPD — Dados mínimos necessários</option></select>
+            </div>
+          </div>
+          <div style="margin-top:18px">
+            <button class="btn-primary" style="margin-left:0" onclick="showToast('Configurações de segurança salvas!', 'success')">🔒 Salvar Segurança</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════
+         PAGE: LOGS
+    ════════════════════ -->
+    <div class="page" id="page-logs">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Filtrar logs..." />
+          </div>
+          <select class="filter-select">
+            <option>Todos os níveis</option>
+            <option>INFO</option>
+            <option>WARN</option>
+            <option>ERROR</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Nível</th><th>Mensagem</th><th>Usuário</th><th>IP</th><th>Data/Hora</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge badge-green">INFO</span></td><td>Login realizado com sucesso</td><td>admin@ubsfacil.gov.br</td><td>177.92.1.14</td><td>22/05/2026 09:12</td></tr>
+            <tr><td><span class="badge badge-yellow">WARN</span></td><td>Tentativa de login inválida (3x)</td><td>carlos.lima@email.com</td><td>201.55.100.8</td><td>22/05/2026 08:47</td></tr>
+            <tr><td><span class="badge badge-green">INFO</span></td><td>Novo medicamento cadastrado: Omeprazol</td><td>j.mendes@ubs.sp.gov.br</td><td>189.40.22.1</td><td>22/05/2026 08:30</td></tr>
+            <tr><td><span class="badge badge-red">ERROR</span></td><td>Falha na integração Google Maps API</td><td>sistema</td><td>—</td><td>22/05/2026 07:55</td></tr>
+            <tr><td><span class="badge badge-green">INFO</span></td><td>Unidade "UBS Lapa" atualizada</td><td>admin@ubsfacil.gov.br</td><td>177.92.1.14</td><td>21/05/2026 18:22</td></tr>
+            <tr><td><span class="badge badge-yellow">WARN</span></td><td>Estoque crítico: Insulina NPH (14 unidades)</td><td>sistema</td><td>—</td><td>21/05/2026 16:00</td></tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span class="page-info">6 entradas recentes</span>
+          <button class="btn-page active">1</button>
+          <button class="btn-page">2</button>
+          <button class="btn-page">▶</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══ MODAIS ═══ -->
+
+<!-- Modal: Nova/Editar Unidade -->
+<div class="modal-overlay" id="modal-unidade">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🏥 Cadastrar Unidade</span>
+      <button class="btn-close" onclick="closeModal('modal-unidade')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">Nome da Unidade</label>
+        <input class="form-input" placeholder="Ex: UBS Vila Madalena" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select class="form-select">
+          <option>UBS</option><option>UPA</option><option>Hospital</option>
+          <option>Posto de Saúde</option><option>Farmácia Popular</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select">
+          <option>Ativo</option><option>Inativo</option><option>Pendente</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Endereço completo</label>
+        <input class="form-input" placeholder="Rua, número, bairro, cidade" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefone</label>
+        <input class="form-input" placeholder="(11) 0000-0000" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Horário de funcionamento</label>
+        <input class="form-input" placeholder="Seg–Sex 07h–17h" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Observações</label>
+        <textarea class="form-textarea" placeholder="Informações adicionais..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-unidade')">Cancelar</button>
+      <button class="btn-primary" style="margin-left:0" onclick="saveAndClose('modal-unidade', 'Unidade salva com sucesso!')">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo/Editar Medicamento -->
+<div class="modal-overlay" id="modal-med">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">💊 Cadastrar Medicamento</span>
+      <button class="btn-close" onclick="closeModal('modal-med')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">Nome do Medicamento</label>
+        <input class="form-input" placeholder="Ex: Amoxicilina 500mg" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-select">
+          <option>Analgésico</option><option>Antibiótico</option><option>Diabetes</option>
+          <option>Hipertensão</option><option>Colesterol</option><option>Gastro</option><option>Respiratório</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tarja</label>
+        <select class="form-select">
+          <option>Isento de prescrição</option><option>Tarja Vermelha</option><option>Tarja Preta</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Via de uso</label>
+        <input class="form-input" placeholder="Ex: Oral, Injetável" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dosagem padrão</label>
+        <input class="form-input" placeholder="Ex: 500mg a cada 8h" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Descrição</label>
+        <textarea class="form-textarea" placeholder="Indicações, contraindicações..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Conservação</label>
+        <input class="form-input" placeholder="Ex: Temperatura ambiente, longe da luz" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-med')">Cancelar</button>
+      <button class="btn-primary" style="margin-left:0" onclick="saveAndClose('modal-med', 'Medicamento salvo com sucesso!')">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo/Editar Usuário -->
+<div class="modal-overlay" id="modal-user">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">👤 Cadastrar Usuário</span>
+      <button class="btn-close" onclick="closeModal('modal-user')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Nome</label>
+        <input class="form-input" placeholder="Nome completo" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input class="form-input" type="email" placeholder="email@exemplo.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Perfil</label>
+        <select class="form-select">
+          <option>Cidadão</option><option>Gestor UBS</option><option>Administrador</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select">
+          <option>Ativo</option><option>Inativo</option><option>Bloqueado</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">CPF (Gov.br)</label>
+        <input class="form-input" placeholder="000.000.000-00" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-user')">Cancelar</button>
+      <button class="btn-primary" style="margin-left:0" onclick="saveAndClose('modal-user', 'Usuário salvo com sucesso!')">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Mobile sidebar toggle -->
+<button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+<script>
+  /* ── Navegação entre páginas ── */
+  const pageTitles = {
+    dashboard:     ['Dashboard', '/ Visão geral'],
+    unidades:      ['Unidades de Saúde', '/ Gestão de unidades'],
+    medicamentos:  ['Medicamentos', '/ Gestão de medicamentos'],
+    usuarios:      ['Usuários', '/ Gestão de usuários'],
+    configuracoes: ['Configurações', '/ Configurações do sistema'],
+    logs:          ['Logs do Sistema', '/ Histórico de eventos'],
+  };
+
+  function showPage(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    el.classList.add('active');
+    const [title, breadcrumb] = pageTitles[id] || [id, ''];
+    document.getElementById('topbar-title').textContent = title;
+    document.getElementById('topbar-breadcrumb').textContent = breadcrumb;
+    // fechar sidebar no mobile
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  /* ── Modais ── */
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // fechar clicando no overlay
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal(overlay.id);
+    });
+  });
+  // fechar com ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+  });
+
+  function saveAndClose(modalId, msg) {
+    closeModal(modalId);
+    showToast(msg, 'success');
+  }
+
+  /* ── Toast ── */
+  function showToast(msg, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span class="toast-icon">${type === 'success' ? '✅' : '❌'}</span> ${msg}`;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3200);
+  }
+
+  /* ── Filtro de tabela ── */
+  function filterTable(tableId, query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+  function filterTableBySelect(tableId, value, colIndex) {
+    document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
+      const cell = row.cells[colIndex];
+      if (!value || (cell && cell.textContent.trim().includes(value))) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── Mobile sidebar ── */
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
